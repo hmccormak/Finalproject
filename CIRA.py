@@ -1,32 +1,47 @@
 from pygame import mixer
 
 #def main():
-    # controls whole game
+    # controls whole game, ask for players name,
+    # goes through battles, (player stats reset and end of match?)
 
 #def attack():
     # use attack from list, determine strength from poke stats
-    # and opponen defence
+    # and opponent stats
     
 #def use_item():
-    # use item from list
+    # use item from list, restore hp or boost stat
+    # stat boost resets at end of round
 
 #class poke():
     # poke object, will be used to make a list of them
+    # Attributes: name, type, atk, hp, def, (guts?)
+    # three types: fire, water, magic
+    # water crits fire, fire crits magic, magic crits water
 
-#class Player(name):
+#class Player():
     # create player object, given preset poke list
+    
+# class humanPlayer(Player):
+    # inherits player
 
-#class Opponents():
+#class cpuPlayer(Player):
+    # inherits player
     # creates opponents, the final boss is called Cira
     # not sure if they should have one or many poke
 
 def battle():
+    # music for final fight
+    # may implement switching mechanic
+    # party stats resets and hp restores at end of round
+    # might level up at end of round
     mixer.init()
     mixer.music.load("MEGALOVANIA.mp3")
-    mixer.music.play()
+    mixer.music.play(loops=-1)
 
     atk_list = ["punch", "kick"]
     item_list = ["brain food lunch", "rare candy"]
+    
+    print("\n\n\n\n\n\n\n\n\n\n--++==## THE FIGHT BEGINS ##==++--\n")
 
     choice1_flag = False
     while choice1_flag == False:
