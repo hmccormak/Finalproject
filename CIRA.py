@@ -12,11 +12,16 @@ from pygame import mixer
     # use item from list, restore hp or boost stat
     # stat boost resets at end of round
 
-#class poke():
-    # poke object, will be used to make a list of them
-    # Attributes: name, type, atk, hp, def, (guts?)
-    # three types: fire, water, magic
-    # water crits fire, fire crits magic, magic crits water
+""" class poke():
+
+    def __init__(self, name, atk, hp, def, speed, movelist):
+        
+    poke object, will be used to make a list of them
+    Attributes: name, type, atk, hp, def, speed
+    three types: fire, water, magic
+    water crits fire, fire crits magic, magic crits water """
+    
+#class Item():
 
 #class Player():
     # create player object, given preset poke list
@@ -42,6 +47,9 @@ def battle():
     item_list = ["brain food lunch", "rare candy"]
     
     print("\n\n\n\n\n\n\n\n\n\n--++==## THE FIGHT BEGINS ##==++--\n")
+    
+    print("opponent_name sends out op_poke_name!\n")
+    print("player_name sends out poke_name!\n")
 
     choice1_flag = False
     while choice1_flag == False:
@@ -49,26 +57,26 @@ def battle():
         if choice1.lower() == "attack":
             atk_flag = False
             while atk_flag == False:
-                a_choice = input(f"<Select attack>: {atk_list}: ")
+                a_choice = input(f"\n<Select attack>: {atk_list}: ")
                 if a_choice in atk_list:
                     # use_atk(a_choice)
-                    print("used attack")
+                    print(f"\n~~> used {a_choice}!")
                     atk_flag = True
                 else:
-                    print("pick an option, weenus")
+                    print("\n~~> Pick an option, weenus.")
             choice1_flag = True
         elif choice1.lower() == "item":
             item_flag = False
             while item_flag == False:
-                i_choice = input(f"<Select item>: {item_list}: ")
+                i_choice = input(f"\n<Select item>: {item_list}: ")
                 if i_choice in item_list:
                     # use_item(i_choice)
-                    print("used item")
+                    print(f"\n~~> used {i_choice}!")
                     item_flag = True
                 else:
-                    print("pick an option, pingas")
+                    print("\n~~> Pick an option, pingas.")
             choice1_flag = True
         else:
-            print("pick an option, dingus")
+            print("\n~~> Pick an option, dingus.\n")
 
 battle()
