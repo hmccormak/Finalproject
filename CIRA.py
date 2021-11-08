@@ -1,8 +1,12 @@
 from pygame import mixer
+from time import sleep
 
-#def main():
-    # controls whole game, ask for players name,
-    # goes through battles, (player stats reset and end of match?)
+def main():
+    name = input("What is your name?: ")
+    sleep(1)
+    print(f"{name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
+    sleep(2)
+    battle()
 
 def attack():
     """Deals damages based off of poke stats,
@@ -13,7 +17,7 @@ def attack():
         o_poke: opponent poke
         
     Returns:
-        (int?/float?) of damage value
+        string reporting attack and (int?/float?) damage value
     """
 
 class poke():        
@@ -42,6 +46,15 @@ class itemCatalog():
         Returns:
             Item object    
         """
+        
+class Item():
+    """item object
+    
+    Attributes:
+        name (str): name of item
+        stat (int): points assigned to item
+        type (char): char of a/d/h to denote type
+    """
 
 class Player():
     """create player object, given preset poke and item list,
@@ -60,7 +73,7 @@ def battle():
     atk_list = ["punch", "kick"]
     item_list = ["brain food lunch", "rare candy"]
     
-    print("\n\n\n\n\n\n\n\n\n\n--++==## THE FIGHT BEGINS ##==++--\n")
+    print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     
     print(f"opponent_name sends out op_poke_name!\n")
     print(f"player_name sends out poke_name!\n")
@@ -84,5 +97,5 @@ def check_select(choice, list, choice_flag):
         return (choice_flag)
     else:
         print("~~> Pick an option, dingus.")
-        
-battle()
+
+main()
