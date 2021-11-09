@@ -29,23 +29,49 @@ class poke():
     Attributes: name, type, atk, hp, def, speed
     """
     
-class itemCatalog():
+class ItemCatalog():
     """Creates dictionary of items from csv file, items can either heal
     or boost attack/defense. Item name will be the key, its value and it's
     a/d/h label will be in a tuple
     
     Attributes:
-        items: dictionary of items  
+        item: dictionary of items  
     """
-    def get_item():
+    def __init__(self, fpath):
+        """Method that opens a csv file and catergorizes the items by its name,
+        stat and type of item
+
+        Args:
+            fpath (string): the path to the csv file
+            
+        Side effects:
+            self.item is populated with items in csv file
+        """
+        with open(fpath, "r", encoding="utf-8") as f:
+            self.item = {}
+            for line in f:
+               x = line.split(",")
+               name = x[0]
+               type = x[2]
+               self.item[name] = type 
+    def get_item(self, item_name):
         """Gets item info from catalog and creates item object
         
         Args:
-            name (str): name of item
+            item_name (str): name of item
         
         Returns:
             Item object    
         """
+        for item_name in self.item:
+            if item_name[2] == "a":
+                return self.item #unaweare exaclty how we wanted to use the items, so this commit is where to change return statements
+            if item_name[2] == "d":
+                return self.item
+            if item_name[2] == "h":
+                return self.item
+                
+        
         
 class Item():
     """item object
@@ -55,7 +81,10 @@ class Item():
         stat (int): points assigned to item
         type (char): char of a/d/h to denote type
     """
-
+    
+        
+    
+          
 class Player():
     """create player object, given preset poke and item list,
     CPU players will not have items
