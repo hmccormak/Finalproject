@@ -73,7 +73,7 @@ def battle():
     atk_list = ["punch", "kick"]
     item_list = ["brain food lunch", "rare candy"]
     
-    print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
+    print("\n\n--==++## THE FIGHT BEGINS ##++==--\n")
     
     print(f"opponent_name sends out op_poke_name!\n")
     print(f"player_name sends out poke_name!\n")
