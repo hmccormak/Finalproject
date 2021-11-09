@@ -1,5 +1,6 @@
 from pygame import mixer
 from time import sleep
+from csv import reader
 
 def main():
     name = input("What is your name?: ")
@@ -25,8 +26,9 @@ class poke():
     attacks and its power will be added into a dictionary, eg (attack: power)
     three types: fire, water, magic
     water crits fire, fire crits magic, magic crits water
+    poke moves will be added to its move list
     
-    Attributes: name, type, atk, hp, def, speed
+    Attributes: name, type, atk, hp, def, speed, move_list
     """
     
 class ItemCatalog():
@@ -81,9 +83,16 @@ class Item():
         stat (int): points assigned to item
         type (char): char of a/d/h to denote type
     """
-    
+    def use_item():
+        """uses an item on specified poke object, determines
+        which stat its adding to (hp/atk/def), then adds
         
-    
+        Args:
+            poke: poke object
+
+        Returns:
+            stat (int): value of used item
+        """
           
 class Player():
     """create player object, given preset poke and item list,
