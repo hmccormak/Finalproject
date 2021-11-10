@@ -1,6 +1,6 @@
 from pygame import mixer
 from time import sleep
-
+import csv
 def main():
     name = input("What is your name?: ")
     sleep(1)
@@ -8,7 +8,7 @@ def main():
     sleep(2)
     battle()
 
-def attack():
+def attack(p_poke, o_poke):
     """Deals damages based off of poke stats,
     uses strength() to determine advantage between poke types
     
@@ -19,8 +19,9 @@ def attack():
     Returns:
         string reporting attack and (int?/float?) damage value
     """
+    
 
-class poke():        
+class Poke():        
     """poke object, will be used to make a list of them,
     attacks and its power will be added into a dictionary, eg (attack: power)
     three types: fire, water, magic
@@ -28,6 +29,18 @@ class poke():
     
     Attributes: name, type, atk, hp, def, speed
     """
+    def __init__(self, fpath):
+        with open(fpath, "r", encoding="utf-8")as f:
+            self.pokemon = {}
+            line = csv.reader(f)
+            for line in f:
+                name = line[0]
+                type = line[1]
+                atk = line[2]
+                hp = line[3]
+                deffense = line[4]
+                speed = line[5] #might needed to be changed, unawere of speed in poke csv file
+                self.pokemon[line[0]] = atk, hp
     
 class ItemCatalog():
     """Creates dictionary of items from csv file, items can either heal
@@ -49,11 +62,12 @@ class ItemCatalog():
         """
         with open(fpath, "r", encoding="utf-8") as f:
             self.item = {}
+            line = csv.reader(f)
             for line in f:
-               x = line.split(",")
-               name = x[0]
-               type = x[2]
-               self.item[name] = type 
+               
+               name = line[0]
+               type = line[2]
+               self.item[line[0]] = type, name
     def get_item(self, item_name):
         """Gets item info from catalog and creates item object
         
@@ -81,6 +95,11 @@ class Item():
         stat (int): points assigned to item
         type (char): char of a/d/h to denote type
     """
+    def __init__(self, name, stat, type):
+        self.name = name
+        self.stat = stat
+        self.type = type
+        
     
         
     
@@ -104,8 +123,8 @@ def battle():
     
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     
-    print(f"opponent_name sends out op_poke_name!\n")
-    print(f"player_name sends out poke_name!\n")
+    print(f"opponent sends out op_poke_name!\n")
+    print(f"Player sends out poke_name!\n")
 
     choice_flag = False
     while choice_flag == False:
