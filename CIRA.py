@@ -19,6 +19,10 @@ def attack(p_poke, o_poke):
     Returns:
         string reporting attack and (int?/float?) damage value
     """
+    starting_power = 1
+    p_poke = starting_power
+    o_poke = starting_power
+    
     
 
 class Poke():        
@@ -87,7 +91,7 @@ class ItemCatalog():
                 
         
         
-class Item():
+class Item(ItemCatalog):
     """item object
     
     Attributes:
@@ -99,6 +103,9 @@ class Item():
         self.name = name
         self.stat = stat
         self.type = type
+    def advantage(self, item):
+        self.item = item
+        
         
     
         
@@ -108,6 +115,10 @@ class Player():
     """create player object, given preset poke and item list,
     CPU players will not have items
     """
+    def __init__(self, player):
+        self.player = player
+        
+        
 
 def battle():
     # music for final fight
@@ -131,6 +142,8 @@ def battle():
         choice = input("<Attack or Item?>: ")
         if choice.lower() == "attack":
             a_choice = input(f"<Select item>: {atk_list}: ")
+            
+                
             choice_flag = bool(check_select(a_choice, atk_list, choice_flag))
         elif choice.lower() == "item":
             i_choice = input(f"<Select item>: {item_list}: ")
@@ -145,5 +158,7 @@ def check_select(choice, list, choice_flag):
         return (choice_flag)
     else:
         print("~~> Pick an option, dingus.")
-
+# def attack(choice, list):
+#     if check_select(choice, list, choice_flag=True) is "punch":
+        
 main()
