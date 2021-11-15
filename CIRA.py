@@ -68,11 +68,11 @@ class ItemCatalog():
             self.item = {}
             line = csv.reader(f)
             for line in f:
-               
                name = line[0]
+               points = line[1]
                type = line[2]
-               self.item[line[0]] = type, name
-    def get_item(self, item_name):
+               self.item[line[0]] =name, points, type
+    def get_item(self, poke):
         """Gets item info from catalog and creates item object
         
         Args:
@@ -83,15 +83,15 @@ class ItemCatalog():
         """
         for item_name in self.item:
             if item_name[2] == "a":
-                return self.item #unaweare exaclty how we wanted to use the items, so this commit is where to change return statements
+                poke.atk + item_name[1] 
             if item_name[2] == "d":
-                return self.item
+                poke.defense + item_name[1]
             if item_name[2] == "h":
-                return self.item
+                poke.hp + item_name[1]
                 
         
         
-class Item(ItemCatalog):
+class Item():
     """item object
     
     Attributes:
