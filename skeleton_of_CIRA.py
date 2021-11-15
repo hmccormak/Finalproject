@@ -1,8 +1,6 @@
 from pygame import mixer
 from time import sleep
 import csv
-
-
 def main():
     name = input("What is your name?: ")
     sleep(1)
@@ -32,9 +30,8 @@ class Poke():
     attacks and its power will be added into a dictionary, eg (attack: power)
     three types: fire, water, magic
     water crits fire, fire crits magic, magic crits water
-    poke moves will be added to its move list
     
-    Attributes: name, type, atk, hp, def, speed, move_list
+    Attributes: name, type, atk, hp, def, speed
     """
     def __init__(self, fpath):
         with open(fpath, "r", encoding="utf-8")as f:
@@ -68,10 +65,14 @@ class ItemCatalog():
             self.item is populated with items in csv file
         """
         with open(fpath, "r", encoding="utf-8") as f:
-            self.item_cat = {}
+            self.item = {}
             line = csv.reader(f)
             for line in f:
-               self.item_cat[line[0]] = (line[1], line[2])
+               
+               name = line[0]
+               type = line[2]
+               self.item[line[0]] = type, name
+    def get_item(self, item_name):
         """Gets item info from catalog and creates item object
         
         Args:
@@ -82,15 +83,15 @@ class ItemCatalog():
         """
         for item_name in self.item:
             if item_name[2] == "a":
-                poke.atk + item_name[1] 
+                return self.item #unaweare exaclty how we wanted to use the items, so this commit is where to change return statements
             if item_name[2] == "d":
-                poke.defense + item_name[1]
+                return self.item
             if item_name[2] == "h":
-                poke.hp + item_name[1]
+                return self.item
                 
         
         
-class Item():
+class Item(ItemCatalog):
     """item object
     
     Attributes:
@@ -98,25 +99,17 @@ class Item():
         stat (int): points assigned to item
         type (char): char of a/d/h to denote type
     """
-
     def __init__(self, name, stat, type):
         self.name = name
         self.stat = stat
         self.type = type
+    def advantage(self, item):
+        self.item = item
         
         
-
-    def use_item():
-        """uses an item on specified poke object, determines
-        which stat its adding to (hp/atk/def), then adds
-
+    
         
-        Args:
-            poke: poke object
-
-        Returns:
-            stat (int): value of used item
-        """
+    
           
 class Player():
     """create player object, given preset poke and item list,
@@ -128,10 +121,6 @@ class Player():
         
 
 def battle():
-    # music for final fight
-    # may implement switching mechanic
-    # party stats resets and hp restores at end of round
-    # might level up at end of round
     mixer.init()
     mixer.music.load("MEGALOVANIA.mp3")
     mixer.music.play(loops=-1)
@@ -139,7 +128,7 @@ def battle():
     atk_list = ["punch", "kick"]
     item_list = ["brain food lunch", "rare candy"]
     
-    print("\n\n--==++## THE FIGHT BEGINS ##++==--\n")
+    print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     
     print(f"opponent sends out op_poke_name!\n")
     print(f"Player sends out poke_name!\n")
@@ -164,8 +153,5 @@ def check_select(choice, list, choice_flag):
         choice_flag = True
         return (choice_flag)
     else:
-        print("~~> Pick an option, dingus.")
-# def attack(choice, list):
-#     if check_select(choice, list, choice_flag=True) is "punch":
-        
+        print("~~> Pick an option, dingus.")        
 main()
