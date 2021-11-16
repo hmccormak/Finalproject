@@ -8,30 +8,16 @@ def main():
     sleep(2)
     battle()
 
-def attack(p_poke, o_poke):
-    """Deals damages based off of poke stats,
-    uses strength() to determine advantage between poke types
-    
-    Args:
-        p_poke: player poke
-        o_poke: opponent poke
-        
-    Returns:
-        string reporting attack and (int?/float?) damage value
-    """
-    starting_power = 1
-    p_poke = starting_power
-    o_poke = starting_power
-    
-    
-
 class Poke():        
-    """poke object, will be used to make a list of them,
-    attacks and its power will be added into a dictionary, eg (attack: power)
-    three types: fire, water, magic
-    water crits fire, fire crits magic, magic crits water
-    
-    Attributes: name, type, atk, hp, def, speed
+    """Poke object. Will be used to make a list of poke and a dictionary of stats.
+        
+    Attributes: 
+        name (str): the poke's name
+        type (str): the poke's type (water, fire, magic). decides effectiveness of attacks.
+        atk (float): the poke's attack stat, used to calculate damage
+        hp (float): the poke's hit points, impacted by damage or item
+        defense (float): the poke's defense stat, used to calculate damage
+        speed (float): the poke's speed stat
     """
     def __init__(self, fpath):
         with open(fpath, "r", encoding="utf-8")as f:
@@ -43,7 +29,7 @@ class Poke():
                 atk = line[2]
                 hp = line[3]
                 deffense = line[4]
-                speed = line[5] #might needed to be changed, unawere of speed in poke csv file
+                speed = line[5] #might needed to be changed, unaware of speed in poke csv file
                 self.pokemon[line[0]] = atk, hp
     
 class ItemCatalog():
@@ -72,6 +58,7 @@ class ItemCatalog():
                name = line[0]
                type = line[2]
                self.item[line[0]] = type, name
+    
     def get_item(self, item_name):
         """Gets item info from catalog and creates item object
         
@@ -121,6 +108,15 @@ class Player():
         
 
 def battle():
+    '''Allows poke to choose an attack or an item.
+    
+    Side effects:
+        prints "THE FIGHT BEGINS"
+        prints opponent's poke name
+        prints player's poke name
+        prints prompt to choose attack or item or asks the user to choose attack/item
+    '''
+        
     mixer.init()
     mixer.music.load("MEGALOVANIA.mp3")
     mixer.music.play(loops=-1)
@@ -148,10 +144,70 @@ def battle():
             print("~~> Pick an option, dingus.")
 
 def check_select(choice, list, choice_flag):
+    '''Identifies the player and opponent's selections.
+    
+    Args:
+        choice (str): the attack or item selection
+        battle_list (list): the list of attacks or items
+        choice_flag (bool): True or False
+        
+    Returns:
+        choice_flag (bool): True
+        
+    Side effects:
+        prints which item/attack the player chose
+        prints a prompt if the player makes the wrong selection'''
+        
     if str(choice) in list:
         print(f"~~> used {choice}!")
         choice_flag = True
         return (choice_flag)
     else:
-        print("~~> Pick an option, dingus.")        
+        print("~~> Pick an option, dingus.")   
+        
+def attack(p_poke, o_poke):
+    """Deals damages based off of poke types and poke stats.
+    
+    Args:
+        p_poke: player poke
+        o_poke: opponent poke
+    
+    Returns:
+        o_poke.hp = the opponent poke's modified hp
+        
+    Side effects:
+        prints strings reporting attack and float of damage value
+    """
+    starting_power = 10
+    damage = 0
+    
+    if p_poke.type == "water" and o_poke.type == "fire":
+        damage_type = "It's super effective!"
+        damage = 1.6 * starting_power
+    elif p_poke.type == "fire" and o_poke.type == "magic":
+         damage_type = "It's super effective!"
+         damage = 1.6 * starting_power
+    elif p_poke.type == "magic" and o_poke.type == "water":
+         damage_type = "It's super effective!"
+         damage = 1.6 * starting_power
+    elif p_poke.type == "fire" and o_poke.type == "water":
+        damage_type = "It's not very effective..."
+        damage = .625 * starting_power
+    elif p_poke.type == "magic" and o_poke.type == "fire":
+        damage_type = "It's not very effective..."
+        damage = .625 * starting_power
+    elif p_poke.type == "water" and o_poke.type == "magic":
+        damage_type = "It's not very effective..."
+        damage = .625 * starting_power
+    else:
+        damage_type = ""
+        damage = starting_power
+        
+    damage = damage * (o_poke.defense / p_poke.atk)
+    o_poke.hp = o_poke.hp - damage
+    
+    print(f"{p_poke.name} attacks {o_poke.name}. {damage_type}")
+    print (f"{o_poke.name} takes {damage}!!! {o_poke.name}'s hp is now {o_poke.hp}.")
+    
+    return o_poke.hp     
 main()
