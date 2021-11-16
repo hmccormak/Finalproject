@@ -74,7 +74,7 @@ class ItemCatalog():
                self.item_cat[line[0]] = (line[1], line[2])
 
        
-    def get_item(item_name):
+    def get_item(self, poke):
         """Gets item info from catalog and creates item object
         
         Args:
@@ -107,7 +107,7 @@ class Item():
         self.type = type
     
     def use_item(poke):
-        """uses an item on specified poke object, determines
+        """Uses an item on specified poke object, determines
         which stat its adding to (hp/atk/def), then adds
 
         Args:
@@ -120,6 +120,9 @@ class Item():
 class Player():
     """create player object, given preset poke and item list,
     CPU players will not have items
+    
+    Attributes:
+        player
     """
     def __init__(self, player):
         self.player = player
@@ -127,7 +130,7 @@ class Player():
         
 
 def battle():
-    '''Allows pokes to choose an attack or item.
+    '''Allows poke to choose an attack or item.
     
     Side effects:
     prints "THE FIGHT BEGINS"
