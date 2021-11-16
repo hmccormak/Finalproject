@@ -1,3 +1,5 @@
+import abc
+from os import X_OK
 from pygame import mixer
 from time import sleep
 import csv
@@ -10,22 +12,6 @@ def main():
     sleep(2)
     battle()
 
-def attack(p_poke, o_poke):
-    """Deals damages based off of poke stats,
-    uses strength() to determine advantage between poke types
-    
-    Args:
-        p_poke: player poke
-        o_poke: opponent poke
-        
-    Returns:
-        string reporting attack and (int?/float?) damage value
-    """
-    starting_power = 1
-    p_poke = starting_power
-    o_poke = starting_power
-    
-
 class Poke():        
     """poke object, will be used to make a list of them,
     attacks and its power will be added into a dictionary, eg (attack: power)
@@ -33,7 +19,7 @@ class Poke():
     water crits fire, fire crits magic, magic crits water
     poke moves will be added to its move list
     
-    Attributes: name, type, atk, hp, def, speed, move_list
+    Attributes: name, type, atk, hp, defense, speed, move_list
     """
     def __init__(self, fpath):
         with open(fpath, "r", encoding="utf-8")as f:
@@ -159,9 +145,9 @@ def battle():
         choice = input("<Attack or Item?>: ")
         if choice.lower() == "attack":
             a_choice = input(f"<Select item>: {atk_list}: ")
-            
-                
             choice_flag = bool(check_select(a_choice, atk_list, choice_flag))
+            
+            
         elif choice.lower() == "item":
             i_choice = input(f"<Select item>: {item_list}: ")
             choice_flag = bool(check_select(i_choice, item_list, choice_flag))
@@ -188,7 +174,51 @@ def check_select(choice, list, choice_flag):
         return (choice_flag)
     else:
         print("~~> Pick an option, dingus.")
-# def attack(choice, list):
+        
+def attack(p_poke, o_poke):
+    """Deals damages based off of poke stats,
+    uses strength() to determine advantage between poke types
+    
+    Args:
+        p_poke: player poke
+        o_poke: opponent poke
+        
+    Returns:
+        damage (float): regular, super effective, or not very effective damage done
+        string reporting attack and float of damage value
+    """
+    starting_power = 10
+    damage = 0
+    
+    if p_poke.type == "water" and o_poke.type == "fire":
+        damage_type = "It's super effective!"
+        damage = 1.6 * starting_power
+    if p_poke.type == "fire" and o_poke.type == "magic":
+         damage_type = "It's super effective!"
+         damage = 1.6 * starting_power
+    if p_poke.type == "magic" and o_poke.type == "water":
+         damage_type = "It's super effective!"
+         damage = 1.6 * starting_power
+    if p_poke.type == "fire" and o_poke.type == "water":
+        damage_type = "It's not very effective..."
+        damage = .625 * starting_power
+    if p_poke.type == "magic" and o_poke.type == "fire":
+        damage_type = "It's not very effective..."
+        damage = .625 * starting_power
+    if p_poke.type == "water" and o_poke.type == "magic":
+        damage_type = "It's not very effective..."
+        damage = .625 * starting_power
+    else:
+        damage_type = ""
+        damage = starting_power
+        
+    damage = damage * (o_poke.defense / p_poke.atk)
+    o_poke.hp = o_poke.hp - damage
+    
+    print(f"{p_poke.name} attacks {o_poke.name}. {damage_type}")
+    print (f"{o_poke.name} takes {damage}!!! ")
+
+#def strength() -defines advantage. do we want to use this if advantage defined in attacK()?
 # if check_select(choice, list, choice_flag=True) is "punch":
         
 main()
