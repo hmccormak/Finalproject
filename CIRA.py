@@ -2,13 +2,12 @@ from pygame import mixer
 from time import sleep
 import csv
 
-
 def main():
     name = input("What is your name?: ")
     sleep(1)
     print(f"{name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
-    battle()
+    battle(filename="itemlist.csv")
 
 def attack(p_poke, o_poke):
     """Deals damages based off of poke stats,
@@ -32,9 +31,8 @@ class Poke():
     attacks and its power will be added into a dictionary, eg (attack: power)
     three types: fire, water, magic
     water crits fire, fire crits magic, magic crits water
-    poke moves will be added to its move list
     
-    Attributes: name, type, atk, hp, def, speed, move_list
+    Attributes: name, type, atk, hp, def, speed
     """
     def __init__(self, fpath):
         with open(fpath, "r", encoding="utf-8")as f:
@@ -68,10 +66,14 @@ class ItemCatalog():
             self.item is populated with items in csv file
         """
         with open(fpath, "r", encoding="utf-8") as f:
-            self.item_cat = {}
+            self.inventory = {}
             line = csv.reader(f)
             for line in f:
-               self.item_cat[line[0]] = (line[1], line[2])
+               name = line[0]
+               points = line[1]
+               type = line[2]
+               self.inventory[name] = [points, type]
+    def get_item(self, item):
         """Gets item info from catalog and creates item object
         
         Args:
@@ -80,13 +82,11 @@ class ItemCatalog():
         Returns:
             Item object    
         """
-        for item_name in self.item:
-            if item_name[2] == "a":
-                poke.atk + item_name[1] 
-            if item_name[2] == "d":
-                poke.defense + item_name[1]
-            if item_name[2] == "h":
-                poke.hp + item_name[1]
+        if item not in self.inventory:
+            raise KeyError("Item not in inventory")
+        else:
+            [points, type] = self.inventory[item]
+            return Item(item, points, type)
                 
         
         
@@ -98,25 +98,31 @@ class Item():
         stat (int): points assigned to item
         type (char): char of a/d/h to denote type
     """
-
     def __init__(self, name, stat, type):
         self.name = name
         self.stat = stat
         self.type = type
+    def inventory(self, item):
+        """Method that determines how the items help the player"""
+            
+            
+        for item in self.inventory:
+            if item[2] == "a":
+                Poke.atk + item[1] 
+            if item[2] == "d":
+                Poke.defense + item[1]
+            if item[2] == "h":
+                Poke.hp + item[1]
+            
         
         
-
-    def use_item():
-        """uses an item on specified poke object, determines
-        which stat its adding to (hp/atk/def), then adds
-
         
-        Args:
-            poke: poke object
-
-        Returns:
-            stat (int): value of used item
-        """
+            
+        
+        
+    
+        
+    
           
 class Player():
     """create player object, given preset poke and item list,
@@ -127,7 +133,7 @@ class Player():
         
         
 
-def battle():
+def battle(filename):
     # music for final fight
     # may implement switching mechanic
     # party stats resets and hp restores at end of round
@@ -136,10 +142,10 @@ def battle():
     mixer.music.load("MEGALOVANIA.mp3")
     mixer.music.play(loops=-1)
 
-    atk_list = ["punch", "kick"]
-    item_list = ["brain food lunch", "rare candy"]
+    atk_list = []
+    item_list = []
     
-    print("\n\n--==++## THE FIGHT BEGINS ##++==--\n")
+    print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     
     print(f"opponent sends out op_poke_name!\n")
     print(f"Player sends out poke_name!\n")
