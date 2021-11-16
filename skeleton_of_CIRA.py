@@ -2,6 +2,7 @@ from pygame import mixer
 from time import sleep
 import csv
 def main():
+    """Main function for the pokemon game"""
     name = input("What is your name?: ")
     sleep(1)
     print(f"{name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
@@ -9,7 +10,7 @@ def main():
     battle()
 
 class Poke():        
-    """Poke object. Will be used to make a list of poke and a dictionary of stats.
+    """Poke object. Will be used to make a dictionary of poke.
         
     Attributes: 
         name (str): the poke's name
@@ -30,7 +31,7 @@ class Poke():
                 hp = line[3]
                 deffense = line[4]
                 speed = line[5] #might needed to be changed, unaware of speed in poke csv file
-                self.pokemon[line[0]] = atk, hp
+                self.pokemon[name] = type, atk, hp, deffense, speed
     
 class ItemCatalog():
     """Creates dictionary of items from csv file, items can either heal
@@ -54,10 +55,10 @@ class ItemCatalog():
             self.item = {}
             line = csv.reader(f)
             for line in f:
-               
                name = line[0]
+               points = line[1]
                type = line[2]
-               self.item[line[0]] = type, name
+               self.item[name] = points, type
     
     def get_item(self, item_name):
         """Gets item info from catalog and creates item object
@@ -66,11 +67,11 @@ class ItemCatalog():
             item_name (str): name of item
         
         Returns:
-            Item object    
+            self.item is populated with item    
         """
         for item_name in self.item:
             if item_name[2] == "a":
-                return self.item #unaweare exaclty how we wanted to use the items, so this commit is where to change return statements
+                return self.item
             if item_name[2] == "d":
                 return self.item
             if item_name[2] == "h":
@@ -78,8 +79,8 @@ class ItemCatalog():
                 
         
         
-class Item(ItemCatalog):
-    """item object
+class Item():
+    """item object for items in the players inventory
     
     Attributes:
         name (str): name of item
@@ -87,26 +88,30 @@ class Item(ItemCatalog):
         type (char): char of a/d/h to denote type
     """
     def __init__(self, name, stat, type):
+        """Method that populates the item attributes.
+        Args:
+            name(string):the name of the item
+            stat(int): the amount of points an item aids the player
+            type(string): the type of item (attack/deffense/attack)
+        Side effects:
+            self.name populates with name of item
+            self.stat populates the stat of an item
+            self.type populates the type of an item
+        """
         self.name = name
         self.stat = stat
         self.type = type
-    def advantage(self, item):
-        self.item = item
-        
-        
-    
-        
-    
-          
-class Player():
-    """create player object, given preset poke and item list,
-    CPU players will not have items
-    """
-    def __init__(self, player):
-        self.player = player
-        
-        
-
+    def inventory(self, item):
+        """Method that determines how the items help the player"""
+        inventory = ItemCatalog(item)    
+            
+        for item in inventory:
+            if item[2] == "a":
+                Poke.atk + item[1] 
+            if item[2] == "d":
+                Poke.defense + item[1]
+            if item[2] == "h":
+                Poke.hp + item[1]
 def battle():
     '''Allows poke to choose an attack or an item.
     
