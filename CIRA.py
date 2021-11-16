@@ -19,9 +19,8 @@ class Poke():
     attacks and its power will be added into a dictionary, eg (attack: power)
     three types: fire, water, magic
     water crits fire, fire crits magic, magic crits water
-    poke moves will be added to its move list
-    
-    Attributes: name, type, atk, hp, defense, speed, move_list
+        
+    Attributes: name, type, atk, hp, defense, speed
     """
     def __init__(self, fpath):
         with open(fpath, "r", encoding="utf-8")as f:
@@ -175,16 +174,17 @@ def check_select(choice, battle_list, choice_flag):
         print("~~> Pick an option, dingus.")
         
 def attack(p_poke, o_poke):
-    """Deals damages based off of poke stats,
-    uses strength() to determine advantage between poke types
+    """Deals damages based off of poke types and poke stats.
     
     Args:
         p_poke: player poke
         o_poke: opponent poke
-        
+    
     Returns:
-        damage (float): regular, super effective, or not very effective damage done
-        string reporting attack and float of damage value
+        o_poke.hp = the opponent poke's modified hp
+        
+    Side effects:
+        prints strings reporting attack and float of damage value
     """
     starting_power = 10
     damage = 0
@@ -216,6 +216,8 @@ def attack(p_poke, o_poke):
     
     print(f"{p_poke.name} attacks {o_poke.name}. {damage_type}")
     print (f"{o_poke.name} takes {damage}!!! {o_poke.name}'s hp is now {o_poke.hp}.")
+    
+    return o_poke.hp
 
 #def strength() -defines advantage. do we want to use this if advantage defined in attacK()?
 # if check_select(choice, list, choice_flag=True) is "punch":
