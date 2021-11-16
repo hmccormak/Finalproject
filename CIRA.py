@@ -15,12 +15,15 @@ def main():
     battle()
 
 class Poke():        
-    """poke object, will be used to make a list of them,
-    attacks and its power will be added into a dictionary, eg (attack: power)
-    three types: fire, water, magic
-    water crits fire, fire crits magic, magic crits water
+    """Poke object. Will be used to make a list of poke and a dictionary of stats.
         
-    Attributes: name, type, atk, hp, defense, speed
+    Attributes: 
+        name (str): the poke's name
+        type (str): the poke's type (water, fire, magic). decides effectiveness of attacks.
+        atk (float): the poke's attack stat, used to calculate damage
+        hp (float): the poke's hit points, impacted by damage or item
+        defense (float): the poke's defense stat, used to calculate damage
+        speed (float): the poke's speed stat
     """
     def __init__(self, fpath):
         with open(fpath, "r", encoding="utf-8")as f:
@@ -32,13 +35,13 @@ class Poke():
                 atk = line[2]
                 hp = line[3]
                 defense = line[4]
-                speed = line[5] #might needed to be changed, unawere of speed in poke csv file
+                speed = line[5] #might needed to be changed, unaware of speed in poke csv file
                 self.pokemon[line[0]] = atk, hp
     
 class ItemCatalog():
     """Creates dictionary of items from csv file, items can either heal
     or boost attack/defense. Item name will be the key, its value and it's
-    a/d/h label will be in a tuple
+    a/d/h label will be in a tuple.
     
     Attributes:
         item_cat: dictionary of items  
@@ -80,7 +83,7 @@ class ItemCatalog():
                 
         
 class Item():
-    """Item object
+    """Item object.
     
     Attributes:
         name (str): name of item
@@ -95,7 +98,7 @@ class Item():
     
     def use_item(poke):
         """Uses an item on specified poke object, determines
-        which stat its adding to (hp/atk/def), then adds
+        which stat its adding to (hp/atk/def), then adds.
 
         Args:
             poke: poke object
@@ -105,7 +108,7 @@ class Item():
         """
           
 class Player():
-    """create player object, given preset poke and item list,
+    """Creates player object, given preset poke and item list,
     CPU players will not have items
     
     Attributes:
@@ -116,13 +119,13 @@ class Player():
 
 #def battle(p_poke, o_poke):       
 def battle():
-    '''Allows poke to choose an attack or item.
+    '''Allows poke to choose an attack or an item.
     
     Side effects:
-    prints "THE FIGHT BEGINS"
-    prints opponent's poke name
-    prints player's poke name
-    prints prompt to choose attack or item or asks the user to choose attack/item
+        prints "THE FIGHT BEGINS"
+        prints opponent's poke name
+        prints player's poke name
+        prints prompt to choose attack or item or asks the user to choose attack/item
     '''
     # music for final fight
     # may implement switching mechanic
@@ -153,7 +156,7 @@ def battle():
             print("~~> Pick an option, dingus.")
 
 def check_select(choice, battle_list, choice_flag):
-    '''Identifies the player and opponent's selections
+    '''Identifies the player and opponent's selections.
     
     Args:
         choice (str): the attack or item selection
@@ -166,6 +169,7 @@ def check_select(choice, battle_list, choice_flag):
     Side effects:
         prints which item/attack the player chose
         prints a prompt if the player makes the wrong selection'''
+        
     if str(choice) in battle_list:
         print(f"~~> used {choice}!")
         choice_flag = True
