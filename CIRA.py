@@ -4,12 +4,14 @@ from pygame import mixer
 from time import sleep
 import csv
 
-
 def main():
     name = input("What is your name?: ")
     sleep(1)
     print(f"{name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
+    #a1 = Player()
+    #a2 = Player()
+    #battle(a1, a2)
     battle()
 
 class Poke():        
@@ -112,9 +114,8 @@ class Player():
     """
     def __init__(self, player):
         self.player = player
-        
-        
 
+#def battle(p_poke, o_poke):       
 def battle():
     '''Allows poke to choose an attack or item.
     
@@ -146,20 +147,18 @@ def battle():
         if choice.lower() == "attack":
             a_choice = input(f"<Select item>: {atk_list}: ")
             choice_flag = bool(check_select(a_choice, atk_list, choice_flag))
-            
-            
         elif choice.lower() == "item":
             i_choice = input(f"<Select item>: {item_list}: ")
             choice_flag = bool(check_select(i_choice, item_list, choice_flag))
         else:
             print("~~> Pick an option, dingus.")
 
-def check_select(choice, list, choice_flag):
+def check_select(choice, battle_list, choice_flag):
     '''Identifies the player and opponent's selections
     
     Args:
         choice (str): the attack or item selection
-        list (list): the list of attacks or items
+        battle_list (list): the list of attacks or items
         choice_flag (bool): True or False
         
     Returns:
@@ -168,7 +167,7 @@ def check_select(choice, list, choice_flag):
     Side effects:
         prints which item/attack the player chose
         prints a prompt if the player makes the wrong selection'''
-    if str(choice) in list:
+    if str(choice) in battle_list:
         print(f"~~> used {choice}!")
         choice_flag = True
         return (choice_flag)
@@ -216,7 +215,7 @@ def attack(p_poke, o_poke):
     o_poke.hp = o_poke.hp - damage
     
     print(f"{p_poke.name} attacks {o_poke.name}. {damage_type}")
-    print (f"{o_poke.name} takes {damage}!!! ")
+    print (f"{o_poke.name} takes {damage}!!! {o_poke.name}'s hp is now {o_poke.hp}.")
 
 #def strength() -defines advantage. do we want to use this if advantage defined in attacK()?
 # if check_select(choice, list, choice_flag=True) is "punch":
