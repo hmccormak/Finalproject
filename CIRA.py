@@ -192,19 +192,19 @@ def attack(p_poke, o_poke):
     if p_poke.type == "water" and o_poke.type == "fire":
         damage_type = "It's super effective!"
         damage = 1.6 * starting_power
-    if p_poke.type == "fire" and o_poke.type == "magic":
+    elif p_poke.type == "fire" and o_poke.type == "magic":
          damage_type = "It's super effective!"
          damage = 1.6 * starting_power
-    if p_poke.type == "magic" and o_poke.type == "water":
+    elif p_poke.type == "magic" and o_poke.type == "water":
          damage_type = "It's super effective!"
          damage = 1.6 * starting_power
-    if p_poke.type == "fire" and o_poke.type == "water":
+    elif p_poke.type == "fire" and o_poke.type == "water":
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
-    if p_poke.type == "magic" and o_poke.type == "fire":
+    elif p_poke.type == "magic" and o_poke.type == "fire":
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
-    if p_poke.type == "water" and o_poke.type == "magic":
+    elif p_poke.type == "water" and o_poke.type == "magic":
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
     else:
