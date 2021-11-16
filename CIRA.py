@@ -7,7 +7,7 @@ def main():
     sleep(1)
     print(f"{name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
-    battle(filename="itemlist.csv")
+    battle()
 
 def attack(p_poke, o_poke):
     """Deals damages based off of poke stats,
@@ -133,7 +133,7 @@ class Player():
         
         
 
-def battle(filename):
+def battle():
     # music for final fight
     # may implement switching mechanic
     # party stats resets and hp restores at end of round
@@ -142,8 +142,8 @@ def battle(filename):
     mixer.music.load("MEGALOVANIA.mp3")
     mixer.music.play(loops=-1)
 
-    atk_list = []
-    item_list = []
+    atk_list = ["punch", "kick"]
+    item_list = 
     
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     
