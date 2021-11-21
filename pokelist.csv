@@ -1,3 +1,4 @@
-Squittle,water,25,100,50,moist,10,swirly,20
-Magisaur,magic,25,100,50,david blane,10,flipendo!,20
-Charmancer,fire,25,100,50,blaze it,10,bane of smokey,20
+Squittle,water,25,100,50,1,moist,10,swirly,20
+Magisaur,magic,25,100,50,1,david blane,10,flipendo!,20
+Charmancer,fire,25,100,50,1,blaze it,10,bane of smokey,20
+Gradescope,magic,25,100,50,1,docstring error,10,vauge assert,20

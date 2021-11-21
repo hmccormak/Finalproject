@@ -1,54 +1,126 @@
-import abc
-from os import X_OK
 from pygame import mixer
+
 from time import sleep
+
 import csv
 
 def main():
-    name = input("What is your name?: ")
+    """Main function for the pokemon game,
+    please don't sue us, nintendo"""
+    pokedex = Pokedex("pokelist.csv")
+    item_catalog = ItemCatalog("itemlist.csv")
+    player = input("What is your name?: ")
+    player = Trainer(player)
+    player.add_poke(pokedex.get_poke("Squittle"))
+    player.add_poke(pokedex.get_poke("Magisaur"))
+    player.add_poke(pokedex.get_poke("Charmancer"))
+    cira = Trainer("Cira")
+    cira.add_poke(pokedex.get_poke("Gradescope"))
     sleep(1)
-    print(f"{name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
+    print(f"{player.name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
-    #a1 = Player()
-    #a2 = Player()
-    #battle(a1, a2)
-    battle()
+    battle(player, cira)
 
-class Poke():        
-    """Poke object. Will be used to make a list of poke and a dictionary of stats.
+
+class Trainer():
+    """Trainer object for both human and CPU players
+    
+    Attributes:
+        name (string): trainer name
+        poke_list (list): list of poke objects
+        item_list (list): list of item objects (computer player will likely not use this)
+        sel (int): index of poke list for selection
+    """
+    def __init__(self, name):
+        self.name = name
+        self.poke_list = []
+        self.item_list = []
+        self.sel = 0
         
-    Attributes: 
+    def add_poke(self, poke_obj):
+        self.poke_list.append(poke_obj)
+        
+    def add_item(self, item_obj):
+        self.item_list.append(item_obj)
+
+
+class Pokedex():
+    """Pokedex object. Will be used to make a dictionary of poke.
+        
+    Attributes:
+        pokedex: Catalog of poke info
+    """
+    def __init__(self, fpath):
+        with open(fpath, "r", encoding="UTF-8") as f:
+            self.pokedex = {}
+            reader = csv.reader(f)
+            for line in reader:
+                name = line[0]
+                type = line[1]
+                atk = line[2]
+                hp = line[3]
+                defense = line[4]
+                speed = line[5]
+                move1 = (line[6], line[7])
+                move2 = (line[8], line[9])
+                self.pokedex[name] = (type, atk, hp, defense, speed, move1, move2)
+                
+    def get_poke(self, req_name):
+        """Poke object creator
+        
+        Args:
+            req_name: name of desired poke to create
+            
+        Returns:
+            created poke object if req_name has a match"""
+        if req_name in self.pokedex:
+            req_name = Poke(req_name, 
+                            self.pokedex[req_name][0], 
+                            self.pokedex[req_name][1], 
+                            self.pokedex[req_name][2], 
+                            self.pokedex[req_name][3], 
+                            self.pokedex[req_name][4],
+                            self.pokedex[req_name][5],
+                            self.pokedex[req_name][6])
+            return req_name
+        else:
+            return "no such poke!"
+
+
+class Poke():
+    """Poke object
+    
+    Attributes:
         name (str): the poke's name
         type (str): the poke's type (water, fire, magic). decides effectiveness of attacks.
         atk (float): the poke's attack stat, used to calculate damage
         hp (float): the poke's hit points, impacted by damage or item
         defense (float): the poke's defense stat, used to calculate damage
         speed (float): the poke's speed stat
+        move1 (tuple): weaker move and its base strength
+        move2 (tuple): stonger move and its base strength
     """
-    def __init__(self, fpath):
-        with open(fpath, "r", encoding="utf-8")as f:
-            self.pokemon = {}
-            line = csv.reader(f)
-            for line in f:
-                name = line[0]
-                type = line[1]
-                atk = line[2]
-                hp = line[3]
-                defense = line[4]
-                speed = line[5] #might needed to be changed, unaware of speed in poke csv file
-                self.pokemon[line[0]] = atk, hp
-    
+    def __init__(self, name, type, atk, hp, defense, speed, move1, move2):
+        self.name = name
+        self.type = type
+        self. atk = atk
+        self.hp = hp
+        self.defense = defense
+        self.speed = speed
+        self.atk_list = [move1, move2]
+
+
 class ItemCatalog():
     """Creates dictionary of items from csv file, items can either heal
     or boost attack/defense. Item name will be the key, its value and it's
-    a/d/h label will be in a tuple.
+    a/d/h label will be in a tuple
     
     Attributes:
-        item_cat: dictionary of items  
+        item: dictionary of items  
     """
     def __init__(self, fpath):
-        """Method that opens a csv file and categorizes the items by its name,
-        stat and type of item.
+        """Method that opens a csv file and catergorizes the items by its name,
+        stat and type of item
 
         Args:
             fpath (string): the path to the csv file
@@ -56,69 +128,72 @@ class ItemCatalog():
         Side effects:
             self.item is populated with items in csv file
         """
-        
         with open(fpath, "r", encoding="utf-8") as f:
-            self.item_cat = {}
-            line = csv.reader(f)
-            for line in f:
-               self.item_cat[line[0]] = (line[1], line[2])
+            self.itemcat = {}
+            reader = csv.reader(f)
+            for line in reader:
+               name = line[0]
+               points = line[1]
+               type = line[2]
+               self.itemcat[name] = (points, type)
 
-       
-    def get_item(self, poke):
+    def get_item(self, item_name):
         """Gets item info from catalog and creates item object
         
         Args:
             item_name (str): name of item
         
         Returns:
-            Item object    
+            self.item is populated with item    
         """
-        for item_name in self.item_cat:
-            if item_name[2] == "a":
-                poke.atk + item_name[1] 
-            if item_name[2] == "d":
-                poke.defense + item_name[1]
-            if item_name[2] == "h":
-                poke.hp + item_name[1]
-                
-        
+        if item_name in self.itemcat:
+            item_name = Item(item_name, self.itemcat[item_name][0],
+                             self.itemcat[item_name][1])
+            return item_name
+        else:
+            return "no such item!"
+
+
 class Item():
-    """Item object.
+    """item object for items in the players inventory
     
     Attributes:
         name (str): name of item
         stat (int): points assigned to item
         type (char): char of a/d/h to denote type
     """
-
     def __init__(self, name, stat, type):
+        """Method that populates the item attributes.
+        Args:
+            name(string):the name of the item
+            stat(int): the amount of points an item aids the player
+            type(string): the type of item (attack/deffense/attack)
+        Side effects:
+            self.name populates with name of item
+            self.stat populates the stat of an item
+            self.type populates the type of an item
+        """
         self.name = name
         self.stat = stat
         self.type = type
-    
-    def use_item(poke):
-        """Uses an item on specified poke object, determines
-        which stat its adding to (hp/atk/def), then adds.
-
+        
+    def use_item(self, poke):
+        """Adds values to poke stats based off type
+        
         Args:
-            poke: poke object
+            poke: poke object using item
+        
+        Side effects:
+            adds values to specified poke stats"""
+        if self.type == "h":
+            poke.hp + self.stat
+        if self.type == "a":
+            poke.atk + self.stat
+        if self.type == "d":
+            poke.defense + self.stat
 
-        Returns:
-            stat (int): value of used item
-        """
-          
-class Player():
-    """Creates player object, given preset poke and item list,
-    CPU players will not have items
-    
-    Attributes:
-        player
-    """
-    def __init__(self, player):
-        self.player = player
 
-#def battle(p_poke, o_poke):       
-def battle():
+def battle(player, opponent):
     '''Allows poke to choose an attack or an item.
     
     Side effects:
@@ -127,35 +202,29 @@ def battle():
         prints player's poke name
         prints prompt to choose attack or item or asks the user to choose attack/item
     '''
-    # music for final fight
-    # may implement switching mechanic
-    # party stats resets and hp restores at end of round
-    # might level up at end of round
+        
     mixer.init()
     mixer.music.load("MEGALOVANIA.mp3")
     mixer.music.play(loops=-1)
-
-    atk_list = ["punch", "kick"]
-    item_list = ["brain food lunch", "rare candy"]
     
-    print("\n\n--==++## THE FIGHT BEGINS ##++==--\n")
+    print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     
-    print(f"opponent sends out op_poke_name!\n")
-    print(f"Player sends out poke_name!\n")
+    print(f"opponent sends out {opponent.poke_list[opponent.sel].name}!\n")
+    print(f"Player sends out {player.poke_list[player.sel].name}!\n")
 
     choice_flag = False
     while choice_flag == False:
         choice = input("<Attack or Item?>: ")
         if choice.lower() == "attack":
-            a_choice = input(f"<Select item>: {atk_list}: ")
-            choice_flag = bool(check_select(a_choice, atk_list, choice_flag))
+            a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
+            choice_flag = bool(check_select(a_choice, player.poke_list[player.sel].atk_list, choice_flag))
         elif choice.lower() == "item":
             i_choice = input(f"<Select item>: {item_list}: ")
             choice_flag = bool(check_select(i_choice, item_list, choice_flag))
         else:
             print("~~> Pick an option, dingus.")
 
-def check_select(choice, battle_list, choice_flag):
+def check_select(choice, list, choice_flag):
     '''Identifies the player and opponent's selections.
     
     Args:
@@ -170,12 +239,12 @@ def check_select(choice, battle_list, choice_flag):
         prints which item/attack the player chose
         prints a prompt if the player makes the wrong selection'''
         
-    if str(choice) in battle_list:
+    if str(choice) in list:
         print(f"~~> used {choice}!")
         choice_flag = True
         return (choice_flag)
     else:
-        print("~~> Pick an option, dingus.")
+        print("~~> Pick an option, dingus.")   
         
 def attack(p_poke, o_poke):
     """Deals damages based off of poke types and poke stats.
@@ -221,9 +290,5 @@ def attack(p_poke, o_poke):
     print(f"{p_poke.name} attacks {o_poke.name}. {damage_type}")
     print (f"{o_poke.name} takes {damage}!!! {o_poke.name}'s hp is now {o_poke.hp}.")
     
-    return o_poke.hp
-
-#def strength() -defines advantage. do we want to use this if advantage defined in attacK()?
-# if check_select(choice, list, choice_flag=True) is "punch":
-        
+    return o_poke.hp     
 main()
