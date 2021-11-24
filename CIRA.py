@@ -14,6 +14,7 @@ def main():
     player.add_poke(pokedex.get_poke("Squittle"))
     player.add_poke(pokedex.get_poke("Magisaur"))
     player.add_poke(pokedex.get_poke("Charmancer"))
+    player.add_item(item_catalog.get_item("stamp-fil-a"))
     cira = Trainer("Cira")
     cira.add_poke(pokedex.get_poke("Gradescope"))
     sleep(1)
@@ -61,8 +62,8 @@ class Pokedex():
                 hp = line[3]
                 defense = line[4]
                 speed = line[5]
-                move1 = (line[6], line[7])
-                move2 = (line[8], line[9])
+                move1 = line[6]
+                move2 = line[7]
                 self.pokedex[name] = (type, atk, hp, defense, speed, move1, move2)
                 
     def get_poke(self, req_name):
@@ -93,20 +94,19 @@ class Poke():
     Attributes:
         name (str): the poke's name
         type (str): the poke's type (water, fire, magic). decides effectiveness of attacks.
-        atk (float): the poke's attack stat, used to calculate damage
-        hp (float): the poke's hit points, impacted by damage or item
-        defense (float): the poke's defense stat, used to calculate damage
-        speed (float): the poke's speed stat
-        move1 (tuple): weaker move and its base strength
-        move2 (tuple): stonger move and its base strength
+        atk (int): the poke's attack stat, used to calculate damage
+        hp (int): the poke's hit points, impacted by damage or item
+        defense (int): the poke's defense stat, used to calculate damage
+        speed (int): the poke's speed stat
+        atk_list: list of attack names
     """
     def __init__(self, name, type, atk, hp, defense, speed, move1, move2):
         self.name = name
         self.type = type
-        self. atk = atk
-        self.hp = hp
-        self.defense = defense
-        self.speed = speed
+        self. atk = int(atk)
+        self.hp = int(hp)
+        self.defense = int(defense)
+        self.speed = int(speed)
         self.atk_list = [move1, move2]
 
 
@@ -212,17 +212,27 @@ def battle(player, opponent):
     print(f"opponent sends out {opponent.poke_list[opponent.sel].name}!\n")
     print(f"Player sends out {player.poke_list[player.sel].name}!\n")
 
-    choice_flag = False
+    choice_flag = False ## player turn
     while choice_flag == False:
         choice = input("<Attack or Item?>: ")
         if choice.lower() == "attack":
             a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
             choice_flag = bool(check_select(a_choice, player.poke_list[player.sel].atk_list, choice_flag))
+            if choice_flag == True:
+                attack(player.poke_list[player.sel], opponent.poke_list[opponent.sel], a_choice)
         elif choice.lower() == "item":
-            i_choice = input(f"<Select item>: {item_list}: ")
-            choice_flag = bool(check_select(i_choice, item_list, choice_flag))
+            i_choice = input(f"<Select item>: {player.item_list}: ")
+            choice_flag = bool(check_select(i_choice, player.item_list, choice_flag))
         else:
             print("~~> Pick an option, dingus.")
+    
+    if opponent.poke_list[opponent.sel].hp <= 0:
+        return(f"you win!")
+    
+    attack(opponent.poke_list[opponent.sel], player.poke_list[player.sel], "docstring error") ## CPU turn
+    
+    if player.poke_list[player.sel].hp <= 0:
+        return(f"you lose!")
 
 def check_select(choice, list, choice_flag):
     '''Identifies the player and opponent's selections.
@@ -244,14 +254,15 @@ def check_select(choice, list, choice_flag):
         choice_flag = True
         return (choice_flag)
     else:
-        print("~~> Pick an option, dingus.")   
+        print("~~> Pick an option, dingus.")
         
-def attack(p_poke, o_poke):
+def attack(p_poke, o_poke, selected_attack):
     """Deals damages based off of poke types and poke stats.
     
     Args:
-        p_poke: player poke
-        o_poke: opponent poke
+        p_poke (obj): attacking poke
+        o_poke (obj): opposing poke
+        selected_attack (string): name of selected attack, determines base strength
     
     Returns:
         o_poke.hp = the opponent poke's modified hp
@@ -259,7 +270,10 @@ def attack(p_poke, o_poke):
     Side effects:
         prints strings reporting attack and float of damage value
     """
-    starting_power = 10
+    if selected_attack == p_poke.atk_list[0]:
+        starting_power = 10
+    if selected_attack == p_poke.atk_list[1]:
+        starting_power = 20
     damage = 0
     
     if p_poke.type == "water" and o_poke.type == "fire":
@@ -290,5 +304,5 @@ def attack(p_poke, o_poke):
     print(f"{p_poke.name} attacks {o_poke.name}. {damage_type}")
     print (f"{o_poke.name} takes {damage}!!! {o_poke.name}'s hp is now {o_poke.hp}.")
     
-    return o_poke.hp     
+    return o_poke.hp
 main()
