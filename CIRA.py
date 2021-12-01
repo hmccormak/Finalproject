@@ -231,6 +231,8 @@ def battle(player, opponent):
         elif choice.lower() == "item":
             i_choice = input(f"<Select item>: {player.item_list}: ")
             choice_flag = bool(check_select(i_choice, player.item_list, choice_flag))
+            if choice_flag == True:
+                Item.use_item(player.poke_list[player.sel], i_choice)
         else:
             print("~~> Pick an option, dingus.")
     
