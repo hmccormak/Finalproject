@@ -38,6 +38,9 @@ class Trainer():
         self.item_list = []
         self.sel = 0
         
+    def __repr__(self):
+        return (f"{self.item_list}")
+    
     def add_poke(self, poke_obj):
         self.poke_list.append(poke_obj)
         
@@ -136,6 +139,7 @@ class ItemCatalog():
                points = line[1]
                type = line[2]
                self.itemcat[name] = (points, type)
+               
 
     def get_item(self, item_name):
         """Gets item info from catalog and creates item object
@@ -149,7 +153,7 @@ class ItemCatalog():
         if item_name in self.itemcat:
             item_name = Item(item_name, self.itemcat[item_name][0],
                              self.itemcat[item_name][1])
-            return item_name
+            return (f"{item_name!r}")
         else:
             return "no such item!"
 
@@ -177,6 +181,9 @@ class Item():
         self.stat = stat
         self.type = type
         
+    def __repr__(self):
+        return (f"{self.name}")
+  
     def use_item(self, poke):
         """Adds values to poke stats based off type
         
@@ -187,9 +194,9 @@ class Item():
             adds values to specified poke stats"""
         
         if self.type == "h":
-            poke.hp + self.stat
+            poke.hp += self.stat
         if self.type == "a":
-            poke.atk + self.stat
+            poke.atk += self.stat
         if self.type == "d":
             poke.defense + self.stat
 
