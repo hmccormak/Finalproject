@@ -215,6 +215,9 @@ def battle(player, opponent):
         prints opponent's poke name
         prints player's poke name
         prints prompt to choose attack or item or asks the user to choose attack/item
+        
+    Raises:
+        ValueError -if no option is selected
     '''
         
     mixer.init()
@@ -239,10 +242,10 @@ def battle(player, opponent):
                 a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
                 choice_flag = bool(check_select(a_choice, player.poke_list[player.sel].atk_list, choice_flag))
                 if choice_flag == True:
-                    damage = attack(player_poke, opponent_poke, a_choice)
-                    
                     print(f"{player_poke} attacks {opponent_poke}.")
-                    print(f"{opponent_poke} takes {damage} damage! {opponent_poke}'s hp is now {opponent.poke_list[opponent.sel].hp}.")
+                    attack(player_poke, opponent_poke, a_choice)
+                    print()
+                    sleep(2)
             elif choice.lower() == "item":
                 i_choice = input(f"<Select item>: {player.item_list}: ")
                 choice_flag = bool(check_select(i_choice, player.item_list, choice_flag))
@@ -250,13 +253,11 @@ def battle(player, opponent):
                     item_effect = Item.use_item(player_poke, i_choice)
                     print(f"{item_effect}")
             else:
-                print("~~> Pick an option, dingus.")
-            
-        opponent_damage = attack(opponent_poke, player_poke, "docstring error") ## CPU turn
-        sleep(2)
-        print()
+                raise ValueError("~~> Pick an option, dingus.")
+        
         print(f"{opponent_poke} attacks {player_poke}.")
-        print(f"{player_poke} takes {opponent_damage} damage! {player_poke}'s hp is now {player.poke_list[opponent.sel].hp}.")
+        attack(opponent_poke, player_poke, "docstring error") ## CPU turn
+        
         
     if opponent.poke_list[opponent.sel].hp < 0:
         print(f"{player.name} wins!")
@@ -334,7 +335,9 @@ def attack(p_poke, o_poke, selected_attack):
     damage = damage * (o_poke.defense / p_poke.atk)
     o_poke.hp = o_poke.hp - damage
     p_poke.hp = p_poke.hp - damage
-    
+
+    print(f"{damage_type}")
+    print(f"{o_poke} takes {damage} damage! {o_poke}'s hp is now {o_poke.hp}.")
     return damage
         
 main()
