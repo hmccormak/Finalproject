@@ -111,6 +111,9 @@ class Poke():
         self.defense = int(defense)
         self.speed = int(speed)
         self.atk_list = [move1, move2]
+        
+    def __repr__(self):
+        return (f"{self.name}")
 
 
 class ItemCatalog():
@@ -195,10 +198,13 @@ class Item():
         
         if self.type == "h":
             poke.hp += self.stat
+            return(f"HP has increased")
         if self.type == "a":
             poke.atk += self.stat
+            return(f"Attack has increased")
         if self.type == "d":
             poke.defense + self.stat
+            return(f"Defense has increased")
 
 
 def battle(player, opponent):
@@ -217,32 +223,48 @@ def battle(player, opponent):
     
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     
-    print(f"Your opponent sent out {opponent.poke_list[opponent.sel].name}!\n")
-    print(f"{player.name} sent out {player.poke_list[player.sel].name}!\n")
+    opponent_poke = opponent.poke_list[opponent.sel]
+    player_poke = player.poke_list[player.sel]
+    
+    print(f"Your opponent sent out {opponent_poke}!\n")
+    print(f"{player.name} sent out {player_poke}!\n")
 
-    choice_flag = False ## player turn
-    while choice_flag == False:
-        choice = input("<Attack or Item?>: ")
-        if choice.lower() == "attack":
-            a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
-            choice_flag = bool(check_select(a_choice, player.poke_list[player.sel].atk_list, choice_flag))
-            if choice_flag == True:
-                attack(player.poke_list[player.sel], opponent.poke_list[opponent.sel], a_choice)
-        elif choice.lower() == "item":
-            i_choice = input(f"<Select item>: {player.item_list}: ")
-            choice_flag = bool(check_select(i_choice, player.item_list, choice_flag))
-            if choice_flag == True:
-                Item.use_item(player.poke_list[player.sel], i_choice)
-        else:
-            print("~~> Pick an option, dingus.")
+    while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
+        
+        choice_flag = False ## player turn
+        while choice_flag == False:
+            
+            choice = input("<Attack or Item?>: ")
+            if choice.lower() == "attack":
+                a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
+                choice_flag = bool(check_select(a_choice, player.poke_list[player.sel].atk_list, choice_flag))
+                if choice_flag == True:
+                    damage = attack(player_poke, opponent_poke, a_choice)
+                    
+                    print(f"{player_poke} attacks {opponent_poke}.")
+                    print(f"{opponent_poke} takes {damage} damage! {opponent_poke}'s hp is now {opponent.poke_list[opponent.sel].hp}.")
+            elif choice.lower() == "item":
+                i_choice = input(f"<Select item>: {player.item_list}: ")
+                choice_flag = bool(check_select(i_choice, player.item_list, choice_flag))
+                if choice_flag == True:
+                    item_effect = Item.use_item(player_poke, i_choice)
+                    print(f"{item_effect}")
+            else:
+                print("~~> Pick an option, dingus.")
+            
+        opponent_damage = attack(opponent_poke, player_poke, "docstring error") ## CPU turn
+        sleep(2)
+        print()
+        print(f"{opponent_poke} attacks {player_poke}.")
+        print(f"{player_poke} takes {opponent_damage} damage! {player_poke}'s hp is now {player.poke_list[opponent.sel].hp}.")
+        
+    if opponent.poke_list[opponent.sel].hp < 0:
+        print(f"{player.name} wins!")
+    elif player.poke_list[player.sel].hp < 0:
+        print(f"{player.name} loses!")
+    else:
+        print(f"end of match") #just here for testing
     
-    if opponent.poke_list[opponent.sel].hp <= 0:
-        return(f"you win!")
-    
-    attack(opponent.poke_list[opponent.sel], player.poke_list[player.sel], "docstring error") ## CPU turn
-    
-    if player.poke_list[player.sel].hp <= 0:
-        return(f"you lose!")
 
 def check_select(choice, list, choice_flag):
     '''Identifies the player and opponent's selections.
@@ -288,8 +310,8 @@ def attack(p_poke, o_poke, selected_attack):
     damage = 0
     
     if p_poke.type == "water" and o_poke.type == "fire":
-        damage_type = "It's super effective!"
         damage = 1.6 * starting_power
+        damage_type = "It's super effective!"
     elif p_poke.type == "fire" and o_poke.type == "magic":
          damage_type = "It's super effective!"
          damage = 1.6 * starting_power
@@ -313,14 +335,6 @@ def attack(p_poke, o_poke, selected_attack):
     o_poke.hp = o_poke.hp - damage
     p_poke.hp = p_poke.hp - damage
     
-    while o_poke.hp and p_poke.hp > 0: 
-        print(f"{p_poke.name} attacks {o_poke.name}. {damage_type}")
-        print (f"{o_poke.name} takes {damage}!!! {o_poke.name}'s hp is now {o_poke.hp}.")
-        print()
-        sleep(2)
-        print(f"{o_poke.name} attacks {p_poke.name}. {damage_type}" )
-        print(f"{p_poke.name} takes {damage}!!! {p_poke.name}'s hp is now {p_poke.hp}.")
-        sleep(2)
-        print()
-    return o_poke.hp
+    return damage
+        
 main()
