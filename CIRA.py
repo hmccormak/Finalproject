@@ -17,6 +17,8 @@ def main():
     player.add_poke(pokedex.get_poke("Magisaur"))
     player.add_poke(pokedex.get_poke("Charmancer"))
     player.add_item(item_catalog.get_item("stamp-fil-a"))
+    player.add_item(item_catalog.get_item("cold pizza"))
+    player.add_item(item_catalog.get_item("the best offense"))
     cira = Trainer("Cira")
     cira.add_poke(pokedex.get_poke("Gradescope"))
     sleep(1)
@@ -124,7 +126,7 @@ class ItemCatalog():
     a/d/h label will be in a tuple
     
     Attributes:
-        item: dictionary of items  
+        itemcat: dictionary of items  
     """
     def __init__(self, fpath):
         """Method that opens a csv file and catergorizes the items by its name,
@@ -158,7 +160,7 @@ class ItemCatalog():
         if item_name in self.itemcat:
             item_name = Item(item_name, self.itemcat[item_name][0],
                              self.itemcat[item_name][1])
-            return (f"{item_name!r}")
+            return (f"{item_name}")
         else:
             return "no such item!"
 
@@ -200,13 +202,13 @@ class Item():
         
         if self.type == "h":
             poke.hp += self.stat
-            print(f"HP has increased")
+            print(f"HP has increased by {self.stat} to {poke.hp}")
         elif self.type == "a":
             poke.atk += self.stat
-            print(f"Attack has increased")
+            print(f"Attack has increased by {self.stat} to {poke.atk}")
         elif self.type == "d":
             poke.defense + self.stat
-            print(f"Defense has increased")
+            print(f"Defense has increased by {self.stat} to {poke.defense}")
         else:
             print('something here') #just for testing
 
@@ -251,10 +253,12 @@ def battle(player, opponent):
                     sleep(2)
             elif choice.lower() == "item":
                 i_choice = input(f"<Select item>: {player.item_list}: ")
+                i_choice = str(i_choice)
                 choice_flag = bool(check_select(i_choice, player.item_list, choice_flag))
                 if choice_flag == True:
-                    item_effect = Item.use_item(player_poke, i_choice)
+                    item_effect = Item(i_choice, 100, "h").use_item(player_poke)
                     print()
+                    #had to manually assign stat and type. need a way to autofeed these values depending on item choice
             else:
                 raise ValueError("~~> Pick an option, dingus.")
         
@@ -263,11 +267,11 @@ def battle(player, opponent):
         attack(opponent_poke, player_poke, CPU_attack)
         
         
-    if opponent.poke_list[opponent.sel].hp < 0 and player.poke_list[player.sel].hp > 0:
+    if opponent.poke_list[opponent.sel].hp < 0:
         print(f"{opponent.name}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player.name}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} wins!")
-    elif player.poke_list[player.sel].hp < 0 and opponent.poke_list[opponent.sel].hp > 0:
+    elif player.poke_list[player.sel].hp < 0:
         #something here to switch out pokemon and continue battle
         print(f"{opponent.name}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player.name}'s HP is {player.poke_list[player.sel].hp}.")
