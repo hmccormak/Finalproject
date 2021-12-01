@@ -2,6 +2,8 @@ from pygame import mixer
 
 from time import sleep
 
+from random import randint
+
 import csv
 
 def main():
@@ -198,13 +200,15 @@ class Item():
         
         if self.type == "h":
             poke.hp += self.stat
-            return(f"HP has increased")
-        if self.type == "a":
+            print(f"HP has increased")
+        elif self.type == "a":
             poke.atk += self.stat
-            return(f"Attack has increased")
-        if self.type == "d":
+            print(f"Attack has increased")
+        elif self.type == "d":
             poke.defense + self.stat
-            return(f"Defense has increased")
+            print(f"Defense has increased")
+        else:
+            print('something here') #just for testing
 
 
 def battle(player, opponent):
@@ -229,7 +233,7 @@ def battle(player, opponent):
     opponent_poke = opponent.poke_list[opponent.sel]
     player_poke = player.poke_list[player.sel]
     
-    print(f"Your opponent sent out {opponent_poke}!\n")
+    print(f"Your opponent, {opponent.name} sent out {opponent_poke}!\n")
     print(f"{player.name} sent out {player_poke}!\n")
 
     while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
@@ -240,33 +244,51 @@ def battle(player, opponent):
             choice = input("<Attack or Item?>: ")
             if choice.lower() == "attack":
                 a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
+                print(f"{player_poke} attacks {opponent_poke}.")
                 choice_flag = bool(check_select(a_choice, player.poke_list[player.sel].atk_list, choice_flag))
                 if choice_flag == True:
-                    print(f"{player_poke} attacks {opponent_poke}.")
                     attack(player_poke, opponent_poke, a_choice)
-                    print()
                     sleep(2)
             elif choice.lower() == "item":
                 i_choice = input(f"<Select item>: {player.item_list}: ")
                 choice_flag = bool(check_select(i_choice, player.item_list, choice_flag))
                 if choice_flag == True:
                     item_effect = Item.use_item(player_poke, i_choice)
-                    print(f"{item_effect}")
+                    print()
             else:
                 raise ValueError("~~> Pick an option, dingus.")
         
-        print(f"{opponent_poke} attacks {player_poke}.")
-        attack(opponent_poke, player_poke, "docstring error") ## CPU turn
+        print(f"{opponent_poke} attacks {player_poke}.") #CPU turn
+        CPU_attack = opponent_select(opponent.poke_list[opponent.sel].atk_list)
+        attack(opponent_poke, player_poke, CPU_attack)
         
         
-    if opponent.poke_list[opponent.sel].hp < 0:
+    if opponent.poke_list[opponent.sel].hp < 0 and player.poke_list[player.sel].hp > 0:
+        print(f"{opponent.name}'s HP is {opponent.poke_list[opponent.sel].hp}.")
+        print(f"{player.name}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} wins!")
-    elif player.poke_list[player.sel].hp < 0:
+    elif player.poke_list[player.sel].hp < 0 and opponent.poke_list[opponent.sel].hp > 0:
+        #something here to switch out pokemon and continue battle
+        print(f"{opponent.name}'s HP is {opponent.poke_list[opponent.sel].hp}.")
+        print(f"{player.name}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} loses!")
     else:
-        print(f"end of match") #just here for testing
+        print(f"{opponent.name}'s HP is {opponent.poke_list[opponent.sel].hp}.")
+        print(f"{player.name}'s HP is {player.poke_list[player.sel].hp}.")
+        print(f"DRAW") #just here for testing
     
 
+def opponent_select(list):
+    ''''''
+    attack_selection = randint(0,1)
+    if attack_selection == 0:
+        print(f"~~> used {list[0]}!")
+        return list[0]
+    if attack_selection == 1:
+        print(f"~~> used {list[1]}!")
+        return list[1]
+        
+            
 def check_select(choice, list, choice_flag):
     '''Identifies the player and opponent's selections.
     
@@ -334,10 +356,10 @@ def attack(p_poke, o_poke, selected_attack):
         
     damage = damage * (o_poke.defense / p_poke.atk)
     o_poke.hp = o_poke.hp - damage
-    p_poke.hp = p_poke.hp - damage
 
     print(f"{damage_type}")
-    print(f"{o_poke} takes {damage} damage! {o_poke}'s hp is now {o_poke.hp}.")
-    return damage
+    print(f"{o_poke} takes {damage} damage! {o_poke}'s HP is now {o_poke.hp}.")
+    print()
+    return o_poke.hp
         
 main()
