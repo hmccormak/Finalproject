@@ -185,6 +185,7 @@ class Item():
         
         Side effects:
             adds values to specified poke stats"""
+        
         if self.type == "h":
             poke.hp + self.stat
         if self.type == "a":
@@ -209,8 +210,8 @@ def battle(player, opponent):
     
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     
-    print(f"opponent sends out {opponent.poke_list[opponent.sel].name}!\n")
-    print(f"Player sends out {player.poke_list[player.sel].name}!\n")
+    print(f"Your opponent sent out {opponent.poke_list[opponent.sel].name}!\n")
+    print(f"{player.name} sent out {player.poke_list[player.sel].name}!\n")
 
     choice_flag = False ## player turn
     while choice_flag == False:
@@ -251,6 +252,7 @@ def check_select(choice, list, choice_flag):
         
     if str(choice) in list:
         print(f"~~> used {choice}!")
+        
         choice_flag = True
         return (choice_flag)
     else:
@@ -300,9 +302,16 @@ def attack(p_poke, o_poke, selected_attack):
         
     damage = damage * (o_poke.defense / p_poke.atk)
     o_poke.hp = o_poke.hp - damage
+    p_poke.hp = p_poke.hp - damage
     
-    print(f"{p_poke.name} attacks {o_poke.name}. {damage_type}")
-    print (f"{o_poke.name} takes {damage}!!! {o_poke.name}'s hp is now {o_poke.hp}.")
-    
+    while o_poke.hp and p_poke.hp > 0: 
+        print(f"{p_poke.name} attacks {o_poke.name}. {damage_type}")
+        print (f"{o_poke.name} takes {damage}!!! {o_poke.name}'s hp is now {o_poke.hp}.")
+        print()
+        sleep(2)
+        print(f"{o_poke.name} attacks {p_poke.name}. {damage_type}" )
+        print(f"{p_poke.name} takes {damage}!!! {p_poke.name}'s hp is now {p_poke.hp}.")
+        sleep(2)
+        print()
     return o_poke.hp
 main()
