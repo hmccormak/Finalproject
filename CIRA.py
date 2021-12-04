@@ -236,14 +236,18 @@ def battle(player, opponent):
     player_poke = player.poke_list[player.sel]
     
     print(f"Your opponent, {opponent.name} sent out {opponent_poke}!\n")
-
-
-    while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
-        choice_flag = False
-        while choice_flag == False:
-            a_poke = input(f"<Pokemon>: {player.poke_list}:")
+    choice_flag = False
+    while choice_flag == False:
+        a_poke = input(f"<Choose your Pokemon!>: {player.poke_list}:")
+        if a_poke not in player.poke_list:
             print(f"{player.name} sent out {a_poke}!\n")
-                
+            choice_flag = True
+        else:
+            print("~~> Pick an option, dingus.")
+            
+    while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
+        choice_flag = False 
+        while choice_flag == False:
             choice = input("<Attack or Item?>: ")
             if choice.lower() == "attack":
                 a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
@@ -260,12 +264,13 @@ def battle(player, opponent):
                     item_effect = Item(i_choice, 100, "h").use_item(player_poke)
                     print()
                     #had to manually assign stat and type. need a way to autofeed these values depending on item choice
-            else:
-                print("~~> Pick an option, dingus.")
+                else:
+                    print("~~> Pick an option, dingus.")
         
         print(f"{opponent_poke} attacks {player_poke}.") #CPU turn
         CPU_attack = opponent_select(opponent.poke_list[opponent.sel].atk_list)
         attack(opponent_poke, player_poke, CPU_attack)
+        
         
         
     if opponent.poke_list[opponent.sel].hp < 0:
