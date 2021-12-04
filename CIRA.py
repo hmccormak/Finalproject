@@ -11,9 +11,9 @@ def main():
     please don't sue us, nintendo"""
     pokedex = Pokedex("pokelist.csv")
     item_catalog = ItemCatalog("itemlist.csv")
-    player = input("What is your name?: ")
+    player = (input("What is your name?: "))
     player = Trainer(player)
-    player.add_poke(pokedex.get_poke("Squittle"))
+    player.add_poke(pokedex.get_poke("Squittle"))    
     player.add_poke(pokedex.get_poke("Magisaur"))
     player.add_poke(pokedex.get_poke("Charmancer"))
     player.add_item(item_catalog.get_item("stamp-fil-a"))
@@ -118,6 +118,7 @@ class Poke():
         
     def __repr__(self):
         return (f"{self.name}")
+   
 
 
 class ItemCatalog():
@@ -222,8 +223,7 @@ def battle(player, opponent):
         prints player's poke name
         prints prompt to choose attack or item or asks the user to choose attack/item
         
-    Raises:
-        ValueError -if no option is selected
+    
     '''
         
     mixer.init()
@@ -236,13 +236,14 @@ def battle(player, opponent):
     player_poke = player.poke_list[player.sel]
     
     print(f"Your opponent, {opponent.name} sent out {opponent_poke}!\n")
-    print(f"{player.name} sent out {player_poke}!\n")
+
 
     while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
-        
-        choice_flag = False ## player turn
+        choice_flag = False
         while choice_flag == False:
-            
+            a_poke = input(f"<Pokemon>: {player.poke_list}:")
+            print(f"{player.name} sent out {a_poke}!\n")
+                
             choice = input("<Attack or Item?>: ")
             if choice.lower() == "attack":
                 a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
@@ -260,7 +261,7 @@ def battle(player, opponent):
                     print()
                     #had to manually assign stat and type. need a way to autofeed these values depending on item choice
             else:
-                raise ValueError("~~> Pick an option, dingus.")
+                print("~~> Pick an option, dingus.")
         
         print(f"{opponent_poke} attacks {player_poke}.") #CPU turn
         CPU_attack = opponent_select(opponent.poke_list[opponent.sel].atk_list)
