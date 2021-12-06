@@ -6,6 +6,8 @@ from random import randint
 
 import csv
 
+import pandas as pd
+
 def main():
     """Main function for the pokemon game,
     please don't sue us, nintendo"""
@@ -40,6 +42,8 @@ class Trainer():
         self.name = name
         self.poke_list = []
         self.item_list = []
+        self.df = pd.DataFrame()
+        
         self.sel = 0
         
     def __repr__(self):
@@ -48,8 +52,11 @@ class Trainer():
     def add_poke(self, poke_obj):
         self.poke_list.append(poke_obj)
         
+        
     def add_item(self, item_obj):
         self.item_list.append(item_obj)
+    def add_df(self, poke_obj):
+        self.df.append(poke_obj)
 
 
 class Pokedex():
@@ -72,6 +79,8 @@ class Pokedex():
                 move1 = line[6]
                 move2 = line[7]
                 self.pokedex[name] = (type, atk, hp, defense, speed, move1, move2)
+        
+    
                 
     def get_poke(self, req_name):
         """Poke object creator
@@ -120,9 +129,8 @@ class Poke():
         
     def __repr__(self):
         return (f"{self.name}")
-   
 
-
+        
 class ItemCatalog():
     """Creates dictionary of items from csv file, items can either heal
     or boost attack/defense. Item name will be the key, its value and it's
@@ -241,32 +249,48 @@ def battle(player, opponent):
     while choice_flag == False:
         choice = (input(f"<Choose your Pokemon!>: {player.poke_list}:"))
         if choice.lower() == "squittle":
+            print()
+            sleep(1)
             print(f"{player.name} sent out Squittle!")
+            print()
+            sleep(1)
             choice = player.poke_list[0]
             choice.atk_list = [choice.move1, choice.move2]
             moves = choice.atk_list
             player_poke = player.poke_list[0]
             break
         elif choice.lower() == "magisaur":
+            print()
+            sleep(1)
             print(f"{player.name} sent out Magisaur!")
+            print()
+            sleep(1)
             choice = player.poke_list[1]
             choice.atk_list = [choice.move1, choice.move2]
             moves = choice.atk_list
             player_poke = player.poke_list[1]
             break
         elif choice.lower() == "charmancer":
+            print()
+            sleep(1)
             print(f"{player.name} sent out Charmancer!")
+            print()
+            sleep(1)
             choice = player.poke_list[2]
             choice.atk_list = [choice.move1, choice.move2]
             moves = choice.atk_list
             player_poke = player.poke_list[2]
             break
         else:
-            print("~~> Pick an option, dingus.")             
+            print()
+            sleep(1)
+            print("~~> You picked a wrong pokemon, dingus.")
+            print()
+            sleep(1)             
   
                 
     while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
-        a_choice = input("<Attack or Item?>: ")
+        a_choice = input("<Attack or Item or Change?>: ")
         if a_choice.lower() == "attack":
             a_choice = input(f"<Select attack>: {choice.atk_list}: ")
             if a_choice.lower() in moves[0] or a_choice in moves[1]:
@@ -275,8 +299,8 @@ def battle(player, opponent):
                 print(f"!!      {choice} used {a_choice}!       !!")
                 attack(player_poke, opponent_poke, a_choice)
                 sleep(2)
-                        
-        elif choice.lower() == "item":
+                         
+        elif a_choice.lower() == "item":
             i_choice = input(f"<Select item>: {player.item_list}: ")
             i_choice = str(i_choice)
             choice_flag = bool(check_select(i_choice, player.item_list, choice_flag))
@@ -284,10 +308,56 @@ def battle(player, opponent):
                 item_effect = Item(i_choice, 100, "h").use_item(player_poke)
                 print()
                 #had to manually assign stat and type. need a way to autofeed these values depending on item choice
-            else:
-                print("~~> Pick an option, dingus.")        
-                
-            
+                     
+        elif a_choice.lower() == "change":
+            print()
+            sleep(1)
+            print(f"        {player.name} decides its enough for {choice}!      ")
+            print()
+            c_choice = input(f"<Choose your Pokemon!>: {player.poke_list}:")
+            while c_choice:
+                if c_choice.lower() == "squittle":
+                    print()
+                    sleep(1)
+                    print(f"{player.name} sent out Squittle!")
+                    print()
+                    sleep(1)
+                    choice = player.poke_list[0]
+                    choice.atk_list = [choice.move1, choice.move2]
+                    moves = choice.atk_list
+                    player_poke = player.poke_list[0]
+                    break
+                elif c_choice.lower() == "magisaur":
+                    print()
+                    sleep(1)
+                    print(f"{player.name} sent out Magisaur!")
+                    print()
+                    sleep(1)
+                    choice = player.poke_list[1]
+                    choice.atk_list = [choice.move1, choice.move2]
+                    moves = choice.atk_list
+                    player_poke = player.poke_list[1]
+                    break
+                elif c_choice.lower() == "charmancer":
+                    print()
+                    sleep(1)
+                    print(f"{player.name} sent out Charmancer!")
+                    print()
+                    sleep(1)
+                    choice = player.poke_list[2]
+                    choice.atk_list = [choice.move1, choice.move2]
+                    moves = choice.atk_list
+                    player_poke = player.poke_list[2]
+                    break
+                else:
+                    print()
+                    sleep(1)
+                    print("~~>  You picked a wrong pokemon, dingus.")
+                    print()
+                    sleep(1)
+                    break  
+                        
+                    
 
             
         print(f"{opponent_poke} attacks {player_poke}.") #CPU turn
