@@ -114,7 +114,9 @@ class Poke():
         self.hp = int(hp)
         self.defense = int(defense)
         self.speed = int(speed)
-        self.atk_list = [move1, move2]
+        self.move1 = move1
+        self.move2 = move2
+        self.atk_list = [self.move1, self.move2]
         
     def __repr__(self):
         return (f"{self.name}")
@@ -233,49 +235,63 @@ def battle(player, opponent):
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     
     opponent_poke = opponent.poke_list[opponent.sel]
-    player_poke = player.poke_list[player.sel]
+    
     print(f"Your opponent, {opponent.name} sent out {opponent_poke}!\n")
     choice_flag = False 
     while choice_flag == False:
         choice = (input(f"<Choose your Pokemon!>: {player.poke_list}:"))
         if choice.lower() == "squittle":
             print(f"{player.name} sent out Squittle!")
+            choice = player.poke_list[0]
+            choice.atk_list = [choice.move1, choice.move2]
+            moves = choice.atk_list
+            player_poke = player.poke_list[0]
             break
         elif choice.lower() == "magisaur":
             print(f"{player.name} sent out Magisaur!")
+            choice = player.poke_list[1]
+            choice.atk_list = [choice.move1, choice.move2]
+            moves = choice.atk_list
+            player_poke = player.poke_list[1]
             break
         elif choice.lower() == "charmancer":
             print(f"{player.name} sent out Charmancer!")
+            choice = player.poke_list[2]
+            choice.atk_list = [choice.move1, choice.move2]
+            moves = choice.atk_list
+            player_poke = player.poke_list[2]
             break
         else:
-            print("~~> Pick an option, dingus.")
+            print("~~> Pick an option, dingus.")             
+  
                 
     while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
-       
-        choice_flag = False  ##Player turn           
-        while choice_flag == False:
-            choice = input("<Attack or Item?>: ")
-            if choice.lower() == "attack":
-                a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
-                
-                print(f"{player_poke} attacks {opponent_poke}.")
-                choice_flag = bool(check_select(a_choice, player.poke_list[player.sel].atk_list, choice_flag))
-                if choice_flag == True:
-                    attack(player_poke, opponent_poke, a_choice)
-                    sleep(2)
-            elif choice.lower() == "item":
-                i_choice = input(f"<Select item>: {player.item_list}: ")
-                i_choice = str(i_choice)
-                choice_flag = bool(check_select(i_choice, player.item_list, choice_flag))
-                if choice_flag == True:
-                    item_effect = Item(i_choice, 100, "h").use_item(player_poke)
-                    print()
-                    #had to manually assign stat and type. need a way to autofeed these values depending on item choice
+        a_choice = input("<Attack or Item?>: ")
+        if a_choice.lower() == "attack":
+            a_choice = input(f"<Select attack>: {choice.atk_list}: ")
+            if a_choice.lower() in moves[0] or a_choice in moves[1]:
+                print()
+                print(f"!!      {choice} attacks {opponent_poke}      !!")
+                print(f"!!      {choice} used {a_choice}!       !!")
+                attack(player_poke, opponent_poke, a_choice)
+                sleep(2)
+                        
+        elif choice.lower() == "item":
+            i_choice = input(f"<Select item>: {player.item_list}: ")
+            i_choice = str(i_choice)
+            choice_flag = bool(check_select(i_choice, player.item_list, choice_flag))
+            if choice_flag == True:
+                item_effect = Item(i_choice, 100, "h").use_item(player_poke)
+                print()
+                #had to manually assign stat and type. need a way to autofeed these values depending on item choice
             else:
-                print("~~> Pick an option, dingus.")
+                print("~~> Pick an option, dingus.")        
+                
+            
+
             
         print(f"{opponent_poke} attacks {player_poke}.") #CPU turn
-        CPU_attack = opponent_select(opponent.poke_list[opponent.sel].atk_list)
+        CPU_attack = opponent_select(opponent_poke.atk_list)
         attack(opponent_poke, player_poke, CPU_attack)
             
             
@@ -299,7 +315,7 @@ def opponent_select(list):
     ''''''
     attack_selection = randint(0,1)
     if attack_selection == 0:
-        print(f"{list.poke_list}~~> used {list[0]}!")
+        print(f"{list}~~> used {list[0]}!")
         return list[0]
     if attack_selection == 1:
         print(f"~~> used {list[1]}!")
@@ -350,24 +366,38 @@ def attack(p_poke, o_poke, selected_attack):
     damage = 0
     
     if p_poke.type == "water" and o_poke.type == "fire":
+        print()
+        sleep(1)
         damage = 1.6 * starting_power
         damage_type = "It's super effective!"
     elif p_poke.type == "fire" and o_poke.type == "magic":
-         damage_type = "It's super effective!"
-         damage = 1.6 * starting_power
+        print()
+        sleep(1)
+        damage_type = "It's super effective!"
+        damage = 1.6 * starting_power
     elif p_poke.type == "magic" and o_poke.type == "water":
-         damage_type = "It's super effective!"
-         damage = 1.6 * starting_power
+        print()
+        sleep(1)
+        damage_type = "It's super effective!"
+        damage = 1.6 * starting_power
     elif p_poke.type == "fire" and o_poke.type == "water":
+        print()
+        sleep(1)
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
     elif p_poke.type == "magic" and o_poke.type == "fire":
+        print()
+        sleep(1)
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
     elif p_poke.type == "water" and o_poke.type == "magic":
+        print()
+        sleep(1)
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
     else:
+        print()
+        sleep(1)
         damage_type = ""
         damage = starting_power
         
