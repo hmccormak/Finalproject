@@ -367,17 +367,17 @@ def battle(player, opponent):
             
             
     if opponent.poke_list[opponent.sel].hp < 0:
-        print(f"{opponent.name}'s HP is {opponent.poke_list[opponent.sel].hp}.")
-        print(f"{player.name}'s HP is {player.poke_list[player.sel].hp}.")
+        print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
+        print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} wins!")
     elif player.poke_list[player.sel].hp < 0:
             #something here to switch out pokemon and continue battle
-        print(f"{opponent.name}'s HP is {opponent.poke_list[opponent.sel].hp}.")
-        print(f"{player.name}'s HP is {player.poke_list[player.sel].hp}.")
+        print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
+        print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} loses!")
     else:
-        print(f"{opponent.name}'s HP is {opponent.poke_list[opponent.sel].hp}.")
-        print(f"{player.name}'s HP is {player.poke_list[player.sel].hp}.")
+        print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
+        print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"DRAW") #just here for testing
     
 
