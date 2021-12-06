@@ -218,7 +218,7 @@ class Item():
             poke.atk += self.stat
             print(f"Attack has increased by {self.stat} to {poke.atk}")
         elif self.type == "d":
-            poke.defense + self.stat
+            poke.defense += self.stat
             print(f"Defense has increased by {self.stat} to {poke.defense}")
         else:
             print('something here') #just for testing
@@ -382,7 +382,14 @@ def battle(player, opponent):
     
 
 def opponent_select(list):
-    ''''''
+    '''Attack selection function for CPU player,
+    attack is selected at random
+    
+    Args:
+        list: list of attacks
+    
+    Returns:
+        Randomly selected attack'''
     attack_selection = randint(0,1)
     if attack_selection == 0:
         print(f"{list}~~> used {list[0]}!")
@@ -480,4 +487,5 @@ def attack(p_poke, o_poke, selected_attack):
     return o_poke.hp
 
         
-main()
+if __name__ == '__main__':
+    main()
