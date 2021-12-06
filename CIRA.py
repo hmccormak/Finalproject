@@ -234,23 +234,30 @@ def battle(player, opponent):
     
     opponent_poke = opponent.poke_list[opponent.sel]
     player_poke = player.poke_list[player.sel]
-    
     print(f"Your opponent, {opponent.name} sent out {opponent_poke}!\n")
-    choice_flag = False
+    choice_flag = False 
     while choice_flag == False:
-        a_poke = input(f"<Choose your Pokemon!>: {player.poke_list}:")
-        if a_poke not in player.poke_list:
-            print(f"{player.name} sent out {a_poke}!\n")
-            choice_flag = True
+        choice = (input(f"<Choose your Pokemon!>: {player.poke_list}:"))
+        if choice.lower() == "squittle":
+            print(f"{player.name} sent out Squittle!")
+            break
+        elif choice.lower() == "magisaur":
+            print(f"{player.name} sent out Magisaur!")
+            break
+        elif choice.lower() == "charmancer":
+            print(f"{player.name} sent out Charmancer!")
+            break
         else:
             print("~~> Pick an option, dingus.")
-            
+                
     while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
-        choice_flag = False 
+       
+        choice_flag = False  ##Player turn           
         while choice_flag == False:
             choice = input("<Attack or Item?>: ")
             if choice.lower() == "attack":
                 a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
+                
                 print(f"{player_poke} attacks {opponent_poke}.")
                 choice_flag = bool(check_select(a_choice, player.poke_list[player.sel].atk_list, choice_flag))
                 if choice_flag == True:
@@ -264,21 +271,21 @@ def battle(player, opponent):
                     item_effect = Item(i_choice, 100, "h").use_item(player_poke)
                     print()
                     #had to manually assign stat and type. need a way to autofeed these values depending on item choice
-                else:
-                    print("~~> Pick an option, dingus.")
-        
+            else:
+                print("~~> Pick an option, dingus.")
+            
         print(f"{opponent_poke} attacks {player_poke}.") #CPU turn
         CPU_attack = opponent_select(opponent.poke_list[opponent.sel].atk_list)
         attack(opponent_poke, player_poke, CPU_attack)
-        
-        
-        
+            
+            
+            
     if opponent.poke_list[opponent.sel].hp < 0:
         print(f"{opponent.name}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player.name}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} wins!")
     elif player.poke_list[player.sel].hp < 0:
-        #something here to switch out pokemon and continue battle
+            #something here to switch out pokemon and continue battle
         print(f"{opponent.name}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player.name}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} loses!")
@@ -292,7 +299,7 @@ def opponent_select(list):
     ''''''
     attack_selection = randint(0,1)
     if attack_selection == 0:
-        print(f"~~> used {list[0]}!")
+        print(f"{list.poke_list}~~> used {list[0]}!")
         return list[0]
     if attack_selection == 1:
         print(f"~~> used {list[1]}!")
@@ -371,5 +378,6 @@ def attack(p_poke, o_poke, selected_attack):
     print(f"{o_poke} takes {damage} damage! {o_poke}'s HP is now {o_poke.hp}.")
     print()
     return o_poke.hp
+
         
 main()
