@@ -430,7 +430,16 @@ def battle(player, opponent):
     
 
 def update_stats(file, player):
-    ''''''
+    '''Opens file, reads it, and writes new stats.
+    
+    Args:
+        file: filepath of items
+        player (obj): Poke object
+    
+    Side effects:
+        writes to filepath
+    
+    '''
     with open(file, 'r+') as f:
         for line in f:
             if line[0] == player.name:
@@ -438,7 +447,16 @@ def update_stats(file, player):
                 line[3] = f.write(player.hp)
                 line[4] = f.write(player.defense)
                 line[5] = f.write(player.speed)
+                
 def pandas_table(choice, player):
+    '''Displays panda table of stats depending on which poke is selected.
+    
+    Args:
+        choice (str): player poke choice
+        player (obj): Poke object
+        
+    Side effects:
+        prints poke_stats table'''
     
     df = pd.read_csv("pokelist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
     #need to update CSV file when stats change 
@@ -458,7 +476,7 @@ def pandas_table(choice, player):
     else:
         poke_stats = df.loc[[3]]
         poke_stats = poke_stats.to_string(index = False)
-    print(poke_stats) #replace with return function?
+    print(poke_stats)
 
 def opponent_select(list):
     '''Attack selection function for CPU player,
