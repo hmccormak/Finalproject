@@ -27,7 +27,6 @@ def main():
     cira_blurb = "\nAHAHAAAHAAAHA, DO YOU REALLY THINK YOU CAN DEFEAT ME WITH YOUR SPAGHETTI CODE?\n\nI CAN DESTROY YOUR GRADES IN THE BLINK OF AN EYE!\n\nYOUR PARENTS ARE GONNA FIND A PILE OF ONES AND ZEROS WHEN IM DONE WITH YOU!\n\nTL;DR:\nEAT EXCREMENT BUNDLES OF STICKS"
     cira = Trainer("Cira", cira_blurb)
     cira.add_codé(codédex.get_codé("Gradescope"))
-    player.add_item(item.get_item("the best deffense"))
     cira = Trainer("Cira")
     cira.add_codé(codédex.get_codé("Gradescope"))
     sleep(1)
@@ -182,9 +181,9 @@ class ItemCatalog():
             self.item is populated with item    
         """
         if item_name in self.itemcat:
-            item_name = Item(item_name, self.itemcat[item_name][0],
+            item = Item(item_name, self.itemcat[item_name][0],
                              self.itemcat[item_name][1])
-            return (f"{item_name}")
+            return (item)
 
 
 class Item():
@@ -207,7 +206,7 @@ class Item():
             self.type populates the type of an item
         """
         self.name = name
-        self.stat = stat
+        self.stat = int(stat)
         self.type = type
         
     def __repr__(self):
@@ -271,7 +270,7 @@ def battle(player, opponent, item_catalog):
         prints prompt to choose attack or item or asks the user to choose attack/item
     '''
 
-    music_and_blurb(opponent)
+    #music_and_blurb(opponent)
     
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     opponent_codé = opponent.codé_list[opponent.sel]
@@ -324,44 +323,18 @@ def battle(player, opponent, item_catalog):
 
                 sleep(2)              
         elif a_choice.lower() == "item":
-            print()
-            sleep(1)
             i_choice = input(f"<Select item>: {player.item_list}: ")
-        
-            temp_list = [item for item in player.item_list]
-            if i_choice.lower() in temp_list:
-                
-                
-                    
-            
-                result = item.itemcat.get(i_choice)
-                
-                if result[1] == "h":
-                    Item(i_choice, result[0], result[1]).use_item(player_codé)
-                if result[1] == "a":
-                    Item(i_choice, result[0], result[1]).use_item(player_codé)
-                if result[1] == "d":
-                    Item(i_choice, result[0], result[1]).use_item(player_codé)
-            #     temp_list.append(player.item_list[j].name)
-            # choice_flag = bool(check_select(i_choice, temp_list, choice_flag))
-            # if choice_flag == True:
-                # for i in range(len(temp_list)):
-                #     if i_choice == player.item_list[i].name:
-                #         player.item_list[i].use_item(player_codé)
-                #         del player.item_list[i]
-                # print()
-    # choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))
-    # choice_flag = False
-    # new = [codé.name.lower() for codé in player.codé_list]
-    # while choice_flag == False:
-    #     if choice.lower() in new:
-        
-    #         choice_flag = True
-    #         player_codé = player.codé_list[player.sel] 
-    #         temp_name = repr(player.codé_list[player.sel]) 
-    #         print()
-    #         sleep(1)
-    #         print(f"{player.name} sent out {temp_name}!")
+            i_choice = str(i_choice)
+            temp_list = []
+            for j in range(len(player.item_list)):
+                temp_list.append(player.item_list[j].name)
+            choice_flag = bool(check_select(i_choice, temp_list, choice_flag))
+            if choice_flag == True:
+                for i in range(len(temp_list)):
+                    if i_choice == player.item_list[i].name:
+                        player.item_list[i].use_item(player_codé)
+                        del player.item_list[i]
+                print()
                 
                 
 
@@ -429,34 +402,14 @@ def battle(player, opponent, item_catalog):
 
         print(f"{opponent_codé} attacks {player_codé}.") #CPU turn
         CPU_attack = opponent_select(opponent_codé.atk_list)
-        attack(opponent_codé, player_codé, CPU_attack)
-        
-        if player.codé_list[player.sel].hp <= 0:
-            for i in range(len(player.codé_list)):
-                if player.codé_list[i].hp > 0:
-                    player_codé = player.codé_list[i]
-                    player.sel = i
-                    print(f"{player.name} sent out {player.codé_list[i]}!")
-                    break        
+        attack(opponent_codé, player_codé, CPU_attack)     
+
             
     if opponent.codé_list[opponent.sel].hp <= 0:
         print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
         print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
         print(f"{player.name} wins!")
     elif player.codé_list[player.sel].hp <= 0:
-        print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
-        print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
-        print(f"{player_codé} was knocked out... ")
-        print(f"{opponent_codé} attacks {player_codé}.") #CPU turn
-        CPU_attack = opponent_select(opponent_codé.atk_list)
-        attack(opponent_codé, player_codé, CPU_attack)    
-            
-    if opponent.codé_list[opponent.sel].hp < 0:
-        print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
-        print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
-        print(f"{player.name} wins!")
-    elif player.codé_list[player.sel].hp < 0:
-            #something here to switch out codémon and continue battle
         print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
         print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
         print(f"{player_codé} was knocked out... ")
