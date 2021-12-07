@@ -216,8 +216,6 @@ class Item():
         Side effects:
             adds values to specified poke stats"""
         
-        
-
         if self.type == "h":
             poke.hp += int(self.stat)
             print(f"Health has increased by {self.stat} to {poke.hp}")
@@ -231,8 +229,6 @@ class Item():
         else:
             print('something here') #just for testing
             
-            
-
 
 def battle(player, opponent, item_catalog):
     '''Allows poke to choose an attack or an item.
@@ -242,8 +238,6 @@ def battle(player, opponent, item_catalog):
         prints opponent's poke name
         prints player's poke name
         prints prompt to choose attack or item or asks the user to choose attack/item
-        
-    
     '''
         
     # mixer.init()
@@ -296,8 +290,27 @@ def battle(player, opponent, item_catalog):
             print("~~> You picked a wrong pokemon, dingus.")
             print()
             sleep(1)             
-                
+           
+    df = pd.read_csv("pokelist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
+    #need to update CSV file when stats change 
+    #https://www.geeksforgeeks.org/how-to-read-csv-file-with-pandas-without-header/
+    df = df.iloc[:, 2:5]    
     while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
+        if choice == player.poke_list[0]:
+            poke_stats = df.loc[[0]]
+            poke_stats = poke_stats.to_string(index = False)
+            #https://stackoverflow.com/questions/24644656/how-to-print-pandas-dataframe-without-index
+        elif choice == player.poke_list[1]:
+            poke_stats = df.loc[[1]]
+            poke_stats = poke_stats.to_string(index = False)
+        elif choice == player.poke_list[2]:
+            poke_stats = df.loc[[2]]
+            poke_stats = poke_stats.to_string(index = False)
+        else:
+            poke_stats = df.loc[[3]]
+            poke_stats = poke_stats.to_string(index = False)
+        print(poke_stats) #replace with return function?
+        
         a_choice = input("<Attack or Item or Change?>: ")
         if a_choice.lower() == "attack":
             a_choice = input(f"<Select attack>: {choice.atk_list}: ")
@@ -508,7 +521,7 @@ def attack(p_poke, o_poke, selected_attack):
     """
     if selected_attack == p_poke.atk_list[0]:
         starting_power = 10
-    if selected_attack == p_poke.atk_list[1]:
+    elif selected_attack == p_poke.atk_list[1]:
         starting_power = 20
     damage = 0
     
