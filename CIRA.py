@@ -19,14 +19,17 @@ def main():
     player.add_poke(pokedex.get_poke("Magisaur"))
     player.add_poke(pokedex.get_poke("Charmancer"))
     player.add_item(item_catalog.get_item("stamp-fil-a"))
+    player.add_item(item_catalog.get_item("cold pizza"))
     player.add_item(item_catalog.get_item("gallon of coffee"))
-    player.add_item(item_catalog.get_item("the best deffense"))
-    cira = Trainer("Cira")
+    player.add_item(item_catalog.get_item("the best offense"))
+    ## will move the long text to a file
+    cira_blurb = "\nAHAHAAAHAAAHA, DO YOU REALLY THINK YOU CAN DEFEAT ME WITH YOUR SPAGHETTI CODE?\n\nI CAN DESTROY YOUR GRADES IN THE BLINK OF AN EYE!\n\nYOUR PARENTS ARE GONNA FIND A PILE OF ONES AND ZEROS WHEN IM DONE WITH YOU!\n\nTL;DR:\nEAT EXCREMENT BUNDLES OF STICKS"
+    cira = Trainer("Cira", cira_blurb)
     cira.add_poke(pokedex.get_poke("Gradescope"))
     sleep(1)
     print(f"{player.name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
-    battle(player, cira, item_catalog)
+    battle(player, cira)
 
 
 class Trainer():
@@ -38,13 +41,13 @@ class Trainer():
         item_list (list): list of item objects (computer player will likely not use this)
         sel (int): index of poke list for selection
     """
-    def __init__(self, name):
+    def __init__(self, name, blurb=""):
         self.name = name
         self.poke_list = []
         self.item_list = []
         self.df = pd.DataFrame()
-        
         self.sel = 0
+        self.blurb = blurb
         
     def __repr__(self):
         return (f"{self.item_list}")
@@ -228,7 +231,18 @@ class Item():
             print('something here') #just for testing
             
 
-def battle(player, opponent, item_catalog):
+       
+def music_and_blurb(opponent):
+    mixer.init()
+    mixer.music.load("meg_intro.mp3")
+    mixer.music.play()
+    print(opponent.blurb)
+    sleep(13.5)
+    mixer.music.load("meg_loop.mp3")
+    mixer.music.play(loops=-1)
+
+
+def battle(player, opponent):
     '''Allows poke to choose an attack or an item.
     
     Side effects:
@@ -237,10 +251,8 @@ def battle(player, opponent, item_catalog):
         prints player's poke name
         prints prompt to choose attack or item or asks the user to choose attack/item
     '''
-        
-    # mixer.init()
-    # mixer.music.load("MEGALOVANIA.mp3")
-    # mixer.music.play(loops=-1)
+
+    music_and_blurb(opponent)
     
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     opponent_poke = opponent.poke_list[opponent.sel]
@@ -249,45 +261,22 @@ def battle(player, opponent, item_catalog):
     choice_flag = False 
     while choice_flag == False:
         choice = (input(f"<Choose your Pokemon!>: {player.poke_list}:"))
-        if choice.lower() == "squittle":
-            print()
-            sleep(1)
-            print(f"{player.name} sent out Squittle!")
-            print()
-            sleep(1)
-            choice = player.poke_list[0]
-            choice.atk_list = [choice.move1, choice.move2]
-            moves = choice.atk_list
-            player_poke = player.poke_list[0]
-            break
-        elif choice.lower() == "magisaur":
-            print()
-            sleep(1)
-            print(f"{player.name} sent out Magisaur!")
-            print()
-            sleep(1)
-            choice = player.poke_list[1]
-            choice.atk_list = [choice.move1, choice.move2]
-            moves = choice.atk_list
-            player_poke = player.poke_list[1]
-            break
-        elif choice.lower() == "charmancer":
-            print()
-            sleep(1)
-            print(f"{player.name} sent out Charmancer!")
-            print()
-            sleep(1)
-            choice = player.poke_list[2]
-            choice.atk_list = [choice.move1, choice.move2]
-            moves = choice.atk_list
-            player_poke = player.poke_list[2]
-            break
-        else:
-            print()
-            sleep(1)
-            print("~~> You picked a wrong pokemon, dingus.")
-            print()
-            sleep(1)             
+        for i in range(len(player.poke_list)):
+            if repr(player.poke_list[i]).lower() == choice.lower():
+                player.sel = i
+                player_poke = player.poke_list[player.sel] ## this seems redundant
+                temp_name = repr(player.poke_list[player.sel]) ## used because fstrings doesnt like repr()
+                choice_flag = True
+                print()
+                sleep(1)
+                print(f"{player.name} sent out {temp_name}!")
+                break
+            else:
+                print()
+                sleep(1)
+                print("~~> You picked a wrong pokemon, dingus.")
+                print()
+                sleep(1)             
            
     while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
         update_stats("pokelist.csv", player)
@@ -303,26 +292,18 @@ def battle(player, opponent, item_catalog):
                 attack(player_poke, opponent_poke, a_choice)
                 sleep(2)              
         elif a_choice.lower() == "item":
-            print()
-            sleep(1)
             i_choice = input(f"<Select item>: {player.item_list}: ")
-            if i_choice.lower() in player.item_list:
+            i_choice = str(i_choice)
+            temp_list = []
+            for j in range(len(player.item_list)):
+                temp_list.append(player.item_list[j].name)
+            choice_flag = bool(check_select(i_choice, temp_list, choice_flag))
+            if choice_flag == True:
+                for i in range(len(temp_list)):
+                    if i_choice == player.item_list[i].name:
+                        player.item_list[i].use_item(player_poke)
+                        del player.item_list[i]
                 print()
-                sleep(1)
-                print(f"!!      {player.name} uses {i_choice}!      !!")
-                print()
-                sleep(1)
-                if i_choice.lower() in item_catalog.itemcat:
-                    
-                    print()
-                    result = item_catalog.itemcat.get(i_choice)
-                   
-                    if result[1] == "h":
-                        Item(i_choice, result[0], result[1]).use_item(player_poke)
-                    if result[1] == "a":
-                        Item(i_choice, result[0], result[1]).use_item(player_poke)
-                    if result[1] == "d":
-                        Item(i_choice, result[0], result[1]).use_item(player_poke)
 
             else:
                 print()
@@ -379,14 +360,21 @@ def battle(player, opponent, item_catalog):
                     break      
         print(f"{opponent_poke} attacks {player_poke}.") #CPU turn
         CPU_attack = opponent_select(opponent_poke.atk_list)
-        attack(opponent_poke, player_poke, CPU_attack)    
+        attack(opponent_poke, player_poke, CPU_attack)
+        
+        if player.poke_list[player.sel].hp <= 0:
+            for i in range(len(player.poke_list)):
+                if player.poke_list[i].hp > 0:
+                    player_poke = player.poke_list[i]
+                    player.sel = i
+                    print(f"{player.name} sent out {player.poke_list[i]}!")
+                    break        
             
-    if opponent.poke_list[opponent.sel].hp < 0:
+    if opponent.poke_list[opponent.sel].hp <= 0:
         print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} wins!")
-    elif player.poke_list[player.sel].hp < 0:
-            #something here to switch out pokemon and continue battle
+    elif player.poke_list[player.sel].hp <= 0:
         print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player_poke} was knocked out... ")
