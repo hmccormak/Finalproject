@@ -94,7 +94,7 @@ class Pokedex():
             req_name = Poke(req_name, 
                             self.pokedex[req_name][0], 
                             self.pokedex[req_name][1], 
-                            self.pokedex[req_name][2], 
+                            self.pokedex[req_name][2],
                             self.pokedex[req_name][3], 
                             self.pokedex[req_name][4],
                             self.pokedex[req_name][5],
