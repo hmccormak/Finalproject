@@ -333,26 +333,18 @@ def battle(player, opponent):
                 attack(player_poke, opponent_poke, a_choice)
                 sleep(2)              
         elif a_choice.lower() == "item":
-            print()
-            sleep(1)
             i_choice = input(f"<Select item>: {player.item_list}: ")
-            if i_choice.lower() in player.item_list:
+            i_choice = str(i_choice)
+            temp_list = []
+            for j in range(len(player.item_list)):
+                temp_list.append(player.item_list[j].name)
+            choice_flag = bool(check_select(i_choice, temp_list, choice_flag))
+            if choice_flag == True:
+                for i in range(len(temp_list)):
+                    if i_choice == player.item_list[i].name:
+                        player.item_list[i].use_item(player_poke)
+                        del player.item_list[i]
                 print()
-                sleep(1)
-                print(f"!!      {player.name} uses {i_choice}!      !!")
-                print()
-                sleep(1)
-                if i_choice.lower() in item_catalog.itemcat:
-                    
-                    print()
-                    result = item_catalog.itemcat.get(i_choice)
-                   
-                    if result[1] == "h":
-                        Item(i_choice, result[0], result[1]).use_item(player_poke)
-                    if result[1] == "a":
-                        Item(i_choice, result[0], result[1]).use_item(player_poke)
-                    if result[1] == "d":
-                        Item(i_choice, result[0], result[1]).use_item(player_poke)
 
             else:
                 print()
