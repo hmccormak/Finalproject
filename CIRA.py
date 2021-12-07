@@ -169,9 +169,9 @@ class ItemCatalog():
             self.item is populated with item    
         """
         if item_name in self.itemcat:
-            item_name = Item(item_name, self.itemcat[item_name][0],
+            item = Item(item_name, self.itemcat[item_name][0],
                              self.itemcat[item_name][1])
-            return (f"{item_name}")
+            return (item)
         else:
             return "no such item!"
 
@@ -196,7 +196,7 @@ class Item():
             self.type populates the type of an item
         """
         self.name = name
-        self.stat = stat
+        self.stat = int(stat)
         self.type = type
         
     def __repr__(self):
@@ -303,9 +303,15 @@ def battle(player, opponent):
         elif a_choice.lower() == "item":
             i_choice = input(f"<Select item>: {player.item_list}: ")
             i_choice = str(i_choice)
-            choice_flag = bool(check_select(i_choice, player.item_list, choice_flag))
+            temp_list = []
+            for j in range(len(player.item_list)):
+                temp_list.append(player.item_list[j].name)
+            choice_flag = bool(check_select(i_choice, temp_list, choice_flag))
             if choice_flag == True:
-                item_effect = Item(i_choice, 100, "h").use_item(player_poke)
+                for i in range(len(temp_list)):
+                    if i_choice == player.item_list[i].name:
+                        player.item_list[i].use_item(player_poke)
+                        del player.item_list[i]
                 print()
                 #had to manually assign stat and type. need a way to autofeed these values depending on item choice
                      
@@ -371,7 +377,10 @@ def battle(player, opponent):
         print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} wins!")
     elif player.poke_list[player.sel].hp < 0:
-            #something here to switch out pokemon and continue battle
+        for i in range(len(player.poke_list)):
+            if player.poke_list[i].hp > 0:
+                player_poke = player.poke_list[i]
+                print(f"{player.name} sent out {player.poke_list[i]}!")
         print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} loses!")
