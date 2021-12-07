@@ -421,7 +421,55 @@ def battle(player, opponent, item_catalog):
             #something here to switch out pokemon and continue battle
         print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
-        print(f"{player.name} loses!")
+        print(f"{player_poke} was knocked out... ")
+        print()
+        sleep(1)
+        choice_flag = False 
+        while choice_flag == False:
+            choice = (input(f"<Choose your Pokemon!>: {player.poke_list}:"))
+            if choice.lower() == "squittle":
+                print()
+                sleep(1)
+                print(f"{player.name} sent out Squittle!")
+                print()
+                sleep(1)
+                choice = player.poke_list[0]
+                choice.atk_list = [choice.move1, choice.move2]
+                moves = choice.atk_list
+                player_poke = player.poke_list[0]
+                break
+            elif choice.lower() == "magisaur":
+                print()
+                sleep(1)
+                print(f"{player.name} sent out Magisaur!")
+                print()
+                sleep(1)
+                choice = player.poke_list[1]
+                choice.atk_list = [choice.move1, choice.move2]
+                moves = choice.atk_list
+                player_poke = player.poke_list[1]
+                break
+            elif choice.lower() == "charmancer":
+                print()
+                sleep(1)
+                print(f"{player.name} sent out Charmancer!")
+                print()
+                sleep(1)
+                choice = player.poke_list[2]
+                choice.atk_list = [choice.move1, choice.move2]
+                moves = choice.atk_list
+                player_poke = player.poke_list[2]
+                
+                
+                
+                break
+            #will try this later
+            else:
+                print()
+                sleep(1)
+                print("~~> You picked a wrong pokemon, dingus.")
+                print()
+                sleep(1)             
     else:
         print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
