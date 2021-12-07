@@ -302,12 +302,13 @@ def battle(player, opponent):
         
         a_choice = input("<Attack or Item or Change?>: ")
         if a_choice.lower() == "attack":
-            a_choice = input(f"<Select attack>: {choice.atk_list}: ")
-            if a_choice.lower() in moves[0] or a_choice in moves[1]:
+            a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
+            if a_choice.lower() in player.poke_list[player.sel].atk_list:
                 print()
                 print(f"!!      {choice} attacks {opponent_poke}      !!")
                 print(f"!!      {choice} used {a_choice}!       !!")
                 attack(player_poke, opponent_poke, a_choice)
+                mixer.Channel(1).play(mixer.Sound("Slash.wav"))
                 sleep(2)              
         elif a_choice.lower() == "item":
             i_choice = input(f"<Select item>: {player.item_list}: ")
@@ -460,6 +461,7 @@ def opponent_select(list):
         print()
         sleep(1)
         print(f"{list}~~> used {list[0]}!")
+        mixer.Channel(1).play(mixer.Sound("Slash.wav"))
         print()
         sleep(1)
         return list[0]
@@ -467,6 +469,7 @@ def opponent_select(list):
         print()
         sleep(1)
         print(f"~~> used {list[1]}!")
+        mixer.Channel(1).play(mixer.Sound("Slash.wav"))
         print()
         sleep(1)
         return list[1]     
