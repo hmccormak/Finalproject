@@ -20,6 +20,7 @@ def main():
     player.add_poke(pokedex.get_poke("Charmancer"))
     player.add_item(item_catalog.get_item("stamp-fil-a"))
     player.add_item(item_catalog.get_item("cold pizza"))
+    player.add_item(item_catalog.get_item("gallon of coffee"))
     player.add_item(item_catalog.get_item("the best offense"))
     ## will move the long text to a file
     cira_blurb = "\nAHAHAAAHAAAHA, DO YOU REALLY THINK YOU CAN DEFEAT ME WITH YOUR SPAGHETTI CODE?\n\nI CAN DESTROY YOUR GRADES IN THE BLINK OF AN EYE!\n\nYOUR PARENTS ARE GONNA FIND A PILE OF ONES AND ZEROS WHEN IM DONE WITH YOU!\n\nTL;DR:\nEAT EXCREMENT BUNDLES OF STICKS"
@@ -28,7 +29,7 @@ def main():
     sleep(1)
     print(f"{player.name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
-    battle(player, cira)
+    battle(player, cira, item_catalog)
 
 
 class Trainer():
@@ -80,9 +81,9 @@ class Pokedex():
                 speed = line[5]
                 move1 = line[6]
                 move2 = line[7]
-                self.pokedex[name] = (type, atk, hp, defense, speed, move1, move2)
+                self.pokedex[name] = (type, atk, hp, int(defense), speed, move1, move2)
         
-    
+            
                 
     def get_poke(self, req_name):
         """Poke object creator
@@ -96,7 +97,7 @@ class Pokedex():
             req_name = Poke(req_name, 
                             self.pokedex[req_name][0], 
                             self.pokedex[req_name][1], 
-                            self.pokedex[req_name][2], 
+                            self.pokedex[req_name][2],
                             self.pokedex[req_name][3], 
                             self.pokedex[req_name][4],
                             self.pokedex[req_name][5],
@@ -121,7 +122,7 @@ class Poke():
     def __init__(self, name, type, atk, hp, defense, speed, move1, move2):
         self.name = name
         self.type = type
-        self. atk = int(atk)
+        self.atk = int(atk)
         self.hp = int(hp)
         self.defense = int(defense)
         self.speed = int(speed)
@@ -151,14 +152,19 @@ class ItemCatalog():
         Side effects:
             self.item is populated with items in csv file
         """
+        with open(fpath, "w", encoding="utf-8") as wf:
+            empty_csv = {}
+            csv_writer = csv.writer(wf)
+            csv_writer.writerows(empty_csv)
         with open(fpath, "r", encoding="utf-8") as f:
             self.itemcat = {}
             reader = csv.reader(f)
             for line in reader:
-               name = line[0]
-               points = line[1]
-               type = line[2]
-               self.itemcat[name] = (points, type)
+               self.name = line[0]
+               self.points = line[1]
+               self.type = line[2]
+               self.itemcat[self.name] = (self.points, self.type)
+            
                
 
     def get_item(self, item_name):
@@ -171,9 +177,9 @@ class ItemCatalog():
             self.item is populated with item    
         """
         if item_name in self.itemcat:
-            item = Item(item_name, self.itemcat[item_name][0],
+            item_name = Item(item_name, self.itemcat[item_name][0],
                              self.itemcat[item_name][1])
-            return (item)
+            return (f"{item_name}")
         else:
             return "no such item!"
 
@@ -198,7 +204,7 @@ class Item():
             self.type populates the type of an item
         """
         self.name = name
-        self.stat = int(stat)
+        self.stat = stat
         self.type = type
         
     def __repr__(self):
@@ -214,16 +220,18 @@ class Item():
             adds values to specified poke stats"""
         
         if self.type == "h":
-            poke.hp += self.stat
-            print(f"HP has increased by {self.stat} to {poke.hp}")
+            poke.hp += int(self.stat)
+            print(f"Health has increased by {self.stat} to {poke.hp}")
         elif self.type == "a":
-            poke.atk += self.stat
-            print(f"Attack has increased by {self.stat} to {poke.atk}")
+            poke.atk + int(self.stat)
+            print(f"Attack has increased by {self.stat} to {poke.atk}")     
         elif self.type == "d":
-            poke.defense += self.stat
+            poke.defense + int(self.stat)
             print(f"Defense has increased by {self.stat} to {poke.defense}")
+           
         else:
             print('something here') #just for testing
+            
 
        
 def music_and_blurb(opponent):
@@ -244,14 +252,11 @@ def battle(player, opponent):
         prints opponent's poke name
         prints player's poke name
         prints prompt to choose attack or item or asks the user to choose attack/item
-        
-    
     '''
-        
+
     music_and_blurb(opponent)
     
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
-    
     opponent_poke = opponent.poke_list[opponent.sel]
     
     print(f"Your opponent, {opponent.name} sent out {opponent_poke}!\n")
@@ -297,9 +302,27 @@ def battle(player, opponent):
             print("~~> You picked a wrong pokemon, dingus.")
             print()
             sleep(1)             
-  
-                
+           
+    df = pd.read_csv("pokelist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
+    #need to update CSV file when stats change 
+    #https://www.geeksforgeeks.org/how-to-read-csv-file-with-pandas-without-header/
+    df = df.iloc[:, 2:5]    
     while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
+        if choice == player.poke_list[0]:
+            poke_stats = df.loc[[0]]
+            poke_stats = poke_stats.to_string(index = False)
+            #https://stackoverflow.com/questions/24644656/how-to-print-pandas-dataframe-without-index
+        elif choice == player.poke_list[1]:
+            poke_stats = df.loc[[1]]
+            poke_stats = poke_stats.to_string(index = False)
+        elif choice == player.poke_list[2]:
+            poke_stats = df.loc[[2]]
+            poke_stats = poke_stats.to_string(index = False)
+        else:
+            poke_stats = df.loc[[3]]
+            poke_stats = poke_stats.to_string(index = False)
+        print(poke_stats) #replace with return function?
+        
         a_choice = input("<Attack or Item or Change?>: ")
         if a_choice.lower() == "attack":
             a_choice = input(f"<Select attack>: {choice.atk_list}: ")
@@ -308,23 +331,35 @@ def battle(player, opponent):
                 print(f"!!      {choice} attacks {opponent_poke}      !!")
                 print(f"!!      {choice} used {a_choice}!       !!")
                 attack(player_poke, opponent_poke, a_choice)
-                sleep(2)
-                         
+                sleep(2)              
         elif a_choice.lower() == "item":
+            print()
+            sleep(1)
             i_choice = input(f"<Select item>: {player.item_list}: ")
-            i_choice = str(i_choice)
-            temp_list = []
-            for j in range(len(player.item_list)):
-                temp_list.append(player.item_list[j].name)
-            choice_flag = bool(check_select(i_choice, temp_list, choice_flag))
-            if choice_flag == True:
-                for i in range(len(temp_list)):
-                    if i_choice == player.item_list[i].name:
-                        player.item_list[i].use_item(player_poke)
-                        del player.item_list[i]
+            if i_choice.lower() in player.item_list:
                 print()
-                #had to manually assign stat and type. need a way to autofeed these values depending on item choice
-                     
+                sleep(1)
+                print(f"!!      {player.name} uses {i_choice}!      !!")
+                print()
+                sleep(1)
+                if i_choice.lower() in item_catalog.itemcat:
+                    
+                    print()
+                    result = item_catalog.itemcat.get(i_choice)
+                   
+                    if result[1] == "h":
+                        Item(i_choice, result[0], result[1]).use_item(player_poke)
+                    if result[1] == "a":
+                        Item(i_choice, result[0], result[1]).use_item(player_poke)
+                    if result[1] == "d":
+                        Item(i_choice, result[0], result[1]).use_item(player_poke)
+
+            else:
+                print()
+                sleep(1)
+                print("~~>  You picked a wrong choice, dingus.")
+                print()
+                sleep(1)                
         elif a_choice.lower() == "change":
             print()
             sleep(1)
@@ -335,7 +370,7 @@ def battle(player, opponent):
                 if c_choice.lower() == "squittle":
                     print()
                     sleep(1)
-                    print(f"{player.name} sent out Squittle!")
+                    print(f"!!      {player.name} sent out Squittle!        !!")
                     print()
                     sleep(1)
                     choice = player.poke_list[0]
@@ -346,7 +381,7 @@ def battle(player, opponent):
                 elif c_choice.lower() == "magisaur":
                     print()
                     sleep(1)
-                    print(f"{player.name} sent out Magisaur!")
+                    print(f"!!      {player.name} sent out Magisaur!        !!")
                     print()
                     sleep(1)
                     choice = player.poke_list[1]
@@ -357,7 +392,7 @@ def battle(player, opponent):
                 elif c_choice.lower() == "charmancer":
                     print()
                     sleep(1)
-                    print(f"{player.name} sent out Charmancer!")
+                    print(f"!!      {player.name} sent out Charmancer!      !!")
                     print()
                     sleep(1)
                     choice = player.poke_list[2]
@@ -371,11 +406,7 @@ def battle(player, opponent):
                     print("~~>  You picked a wrong pokemon, dingus.")
                     print()
                     sleep(1)
-                    break  
-                        
-                    
-
-            
+                    break      
         print(f"{opponent_poke} attacks {player_poke}.") #CPU turn
         CPU_attack = opponent_select(opponent_poke.atk_list)
         attack(opponent_poke, player_poke, CPU_attack)
@@ -395,7 +426,51 @@ def battle(player, opponent):
     elif player.poke_list[player.sel].hp <= 0:
         print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
-        print(f"{player.name} loses!")
+        print(f"{player_poke} was knocked out... ")
+        print()
+        sleep(1)
+        choice_flag = False 
+        while choice_flag == False:
+            choice = (input(f"<Choose your Pokemon!>: {player.poke_list}:"))
+            if choice.lower() == "squittle":
+                print()
+                sleep(1)
+                print(f"{player.name} sent out Squittle!")
+                print()
+                sleep(1)
+                choice = player.poke_list[0]
+                choice.atk_list = [choice.move1, choice.move2]
+                moves = choice.atk_list
+                player_poke = player.poke_list[0]
+                break
+            elif choice.lower() == "magisaur":
+                print()
+                sleep(1)
+                print(f"{player.name} sent out Magisaur!")
+                print()
+                sleep(1)
+                choice = player.poke_list[1]
+                choice.atk_list = [choice.move1, choice.move2]
+                moves = choice.atk_list
+                player_poke = player.poke_list[1]
+                break
+            elif choice.lower() == "charmancer":
+                print()
+                sleep(1)
+                print(f"{player.name} sent out Charmancer!")
+                print()
+                sleep(1)
+                choice = player.poke_list[2]
+                choice.atk_list = [choice.move1, choice.move2]
+                moves = choice.atk_list
+                player_poke = player.poke_list[2]
+                break
+            else:
+                print()
+                sleep(1)
+                print("~~> You picked a wrong pokemon, dingus.")
+                print()
+                sleep(1)             
     else:
         print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
@@ -413,12 +488,19 @@ def opponent_select(list):
         Randomly selected attack'''
     attack_selection = randint(0,1)
     if attack_selection == 0:
+        print()
+        sleep(1)
         print(f"{list}~~> used {list[0]}!")
+        print()
+        sleep(1)
         return list[0]
     if attack_selection == 1:
+        print()
+        sleep(1)
         print(f"~~> used {list[1]}!")
-        return list[1]
-        
+        print()
+        sleep(1)
+        return list[1]     
             
 def check_select(choice, list, choice_flag):
     '''Identifies the player and opponent's selections.
@@ -437,7 +519,6 @@ def check_select(choice, list, choice_flag):
         
     if str(choice) in list:
         print(f"~~> used {choice}!")
-        
         choice_flag = True
         return (choice_flag)
     else:
@@ -459,43 +540,36 @@ def attack(p_poke, o_poke, selected_attack):
     """
     if selected_attack == p_poke.atk_list[0]:
         starting_power = 10
-    if selected_attack == p_poke.atk_list[1]:
+    elif selected_attack == p_poke.atk_list[1]:
         starting_power = 20
     damage = 0
     
     if p_poke.type == "water" and o_poke.type == "fire":
-        print()
-        sleep(1)
+        
         damage = 1.6 * starting_power
         damage_type = "It's super effective!"
     elif p_poke.type == "fire" and o_poke.type == "magic":
-        print()
-        sleep(1)
+        
         damage_type = "It's super effective!"
         damage = 1.6 * starting_power
     elif p_poke.type == "magic" and o_poke.type == "water":
-        print()
-        sleep(1)
+        
         damage_type = "It's super effective!"
         damage = 1.6 * starting_power
     elif p_poke.type == "fire" and o_poke.type == "water":
-        print()
-        sleep(1)
+        
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
     elif p_poke.type == "magic" and o_poke.type == "fire":
-        print()
-        sleep(1)
+        
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
     elif p_poke.type == "water" and o_poke.type == "magic":
-        print()
-        sleep(1)
+        
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
     else:
-        print()
-        sleep(1)
+        
         damage_type = ""
         damage = starting_power
         
@@ -503,8 +577,11 @@ def attack(p_poke, o_poke, selected_attack):
     o_poke.hp = o_poke.hp - damage
 
     print(f"{damage_type}")
+    print()
+    sleep(1)
     print(f"{o_poke} takes {damage} damage! {o_poke}'s HP is now {o_poke.hp}.")
     print()
+    sleep(1)
     return o_poke.hp
 
         
