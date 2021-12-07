@@ -15,7 +15,6 @@ def main():
     item_catalog = ItemCatalog("itemlist.csv")
     player = (input("What is your name?: "))
     player = Trainer(player)
-    
     player.add_poke(pokedex.get_poke("Squittle"))    
     player.add_poke(pokedex.get_poke("Magisaur"))
     player.add_poke(pokedex.get_poke("Charmancer"))
@@ -150,6 +149,10 @@ class ItemCatalog():
         Side effects:
             self.item is populated with items in csv file
         """
+        with open(fpath, "w", encoding="utf-8") as wf:
+            empty_csv = {}
+            csv_writer = csv.writer(wf)
+            csv_writer.writerows(empty_csv)
         with open(fpath, "r", encoding="utf-8") as f:
             self.itemcat = {}
             reader = csv.reader(f)
@@ -248,11 +251,6 @@ def battle(player, opponent, item_catalog):
     # mixer.music.play(loops=-1)
     
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
-    item_type = item_catalog.type
-    item_name = item_catalog.name
-    item_points = item_catalog.points
-    itemcat = [item_name, item_points, item_type]
-   
     opponent_poke = opponent.poke_list[opponent.sel]
     
     print(f"Your opponent, {opponent.name} sent out {opponent_poke}!\n")
@@ -291,9 +289,6 @@ def battle(player, opponent, item_catalog):
             choice.atk_list = [choice.move1, choice.move2]
             moves = choice.atk_list
             player_poke = player.poke_list[2]
-            
-            
-            
             break
         else:
             print()
@@ -301,7 +296,6 @@ def battle(player, opponent, item_catalog):
             print("~~> You picked a wrong pokemon, dingus.")
             print()
             sleep(1)             
-  
                 
     while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
         a_choice = input("<Attack or Item or Change?>: ")
@@ -312,8 +306,7 @@ def battle(player, opponent, item_catalog):
                 print(f"!!      {choice} attacks {opponent_poke}      !!")
                 print(f"!!      {choice} used {a_choice}!       !!")
                 attack(player_poke, opponent_poke, a_choice)
-                sleep(2)
-                         
+                sleep(2)              
         elif a_choice.lower() == "item":
             print()
             sleep(1)
@@ -324,7 +317,6 @@ def battle(player, opponent, item_catalog):
                 print(f"!!      {player.name} uses {i_choice}!      !!")
                 print()
                 sleep(1)
-               
                 if i_choice.lower() in item_catalog.itemcat:
                     
                     print()
@@ -336,26 +328,13 @@ def battle(player, opponent, item_catalog):
                         Item(i_choice, result[0], result[1]).use_item(player_poke)
                     if result[1] == "d":
                         Item(i_choice, result[0], result[1]).use_item(player_poke)
-                        
-                    
-                    
-                    
 
-                    
-                    
-                    
-                    
-                
             else:
                 print()
                 sleep(1)
-                print("~~>  You picked a choice, dingus.")
-                
+                print("~~>  You picked a wrong choice, dingus.")
                 print()
-                sleep(1)
-        
-        
-                        
+                sleep(1)                
         elif a_choice.lower() == "change":
             print()
             sleep(1)
@@ -402,16 +381,10 @@ def battle(player, opponent, item_catalog):
                     print("~~>  You picked a wrong pokemon, dingus.")
                     print()
                     sleep(1)
-                    break  
-                        
-                    
-
-            
+                    break      
         print(f"{opponent_poke} attacks {player_poke}.") #CPU turn
         CPU_attack = opponent_select(opponent_poke.atk_list)
-        attack(opponent_poke, player_poke, CPU_attack)
-            
-            
+        attack(opponent_poke, player_poke, CPU_attack)    
             
     if opponent.poke_list[opponent.sel].hp < 0:
         print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
@@ -459,11 +432,7 @@ def battle(player, opponent, item_catalog):
                 choice.atk_list = [choice.move1, choice.move2]
                 moves = choice.atk_list
                 player_poke = player.poke_list[2]
-                
-                
-                
                 break
-            #will try this later
             else:
                 print()
                 sleep(1)
@@ -489,21 +458,17 @@ def opponent_select(list):
     if attack_selection == 0:
         print()
         sleep(1)
-        
         print(f"{list}~~> used {list[0]}!")
         print()
         sleep(1)
         return list[0]
-
-
     if attack_selection == 1:
         print()
         sleep(1)
         print(f"~~> used {list[1]}!")
         print()
         sleep(1)
-        return list[1]
-        
+        return list[1]     
             
 def check_select(choice, list, choice_flag):
     '''Identifies the player and opponent's selections.
@@ -522,7 +487,6 @@ def check_select(choice, list, choice_flag):
         
     if str(choice) in list:
         print(f"~~> used {choice}!")
-        
         choice_flag = True
         return (choice_flag)
     else:
