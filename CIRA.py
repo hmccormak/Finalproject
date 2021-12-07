@@ -334,11 +334,8 @@ def battle(player, opponent, item_catalog):
                     if i_choice == player.item_list[i].name:
                         player.item_list[i].use_item(player_codé)
                         del player.item_list[i]
+                        break
                 print()
-                
-                
-
-
             else:
                 
                 print()
