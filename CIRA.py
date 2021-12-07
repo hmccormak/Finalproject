@@ -9,27 +9,31 @@ import csv
 import pandas as pd
 
 def main():
-    """Main function for the pokemon game,
+    """Main function for the codémon game,
     please don't sue us, nintendo"""
-    pokedex = Pokedex("pokelist.csv")
-    item_catalog = ItemCatalog("itemlist.csv")
+    codédex = Codédex("codélist.csv")
+    item = ItemCatalog("itemlist.csv")
     player = (input("What is your name?: "))
+
     player = Trainer(player)
-    player.add_poke(pokedex.get_poke("Squittle"))    
-    player.add_poke(pokedex.get_poke("Magisaur"))
-    player.add_poke(pokedex.get_poke("Charmancer"))
-    player.add_item(item_catalog.get_item("stamp-fil-a"))
-    player.add_item(item_catalog.get_item("cold pizza"))
-    player.add_item(item_catalog.get_item("gallon of coffee"))
-    player.add_item(item_catalog.get_item("the best offense"))
+    player.add_codé(codédex.get_codé("Squittle"))    
+    player.add_codé(codédex.get_codé("Magisaur"))
+    player.add_codé(codédex.get_codé("Charmancer"))
+    player.add_item(item.get_item("stamp-fil-a"))
+    player.add_item(item.get_item("cold pizza"))
+    player.add_item(item.get_item("gallon of coffee"))
+    player.add_item(item.get_item("the best offense"))
     ## will move the long text to a file
     cira_blurb = "\nAHAHAAAHAAAHA, DO YOU REALLY THINK YOU CAN DEFEAT ME WITH YOUR SPAGHETTI CODE?\n\nI CAN DESTROY YOUR GRADES IN THE BLINK OF AN EYE!\n\nYOUR PARENTS ARE GONNA FIND A PILE OF ONES AND ZEROS WHEN IM DONE WITH YOU!\n\nTL;DR:\nEAT EXCREMENT BUNDLES OF STICKS"
     cira = Trainer("Cira", cira_blurb)
-    cira.add_poke(pokedex.get_poke("Gradescope"))
+    cira.add_codé(codédex.get_codé("Gradescope"))
+    player.add_item(item.get_item("the best deffense"))
+    cira = Trainer("Cira")
+    cira.add_codé(codédex.get_codé("Gradescope"))
     sleep(1)
     print(f"{player.name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
-    battle(player, cira)
+    battle(player, cira, item)
 
 
 class Trainer():
@@ -37,13 +41,13 @@ class Trainer():
     
     Attributes:
         name (string): trainer name
-        poke_list (list): list of poke objects
+        codé_list (list): list of codé objects
         item_list (list): list of item objects (computer player will likely not use this)
-        sel (int): index of poke list for selection
+        sel (int): index of codé list for selection
     """
     def __init__(self, name, blurb=""):
         self.name = name
-        self.poke_list = []
+        self.codé_list = []
         self.item_list = []
         self.df = pd.DataFrame()
         self.sel = 0
@@ -52,25 +56,25 @@ class Trainer():
     def __repr__(self):
         return (f"{self.item_list}")
     
-    def add_poke(self, poke_obj):
-        self.poke_list.append(poke_obj)
+    def add_codé(self, codé_obj):
+        self.codé_list.append(codé_obj)
         
         
     def add_item(self, item_obj):
         self.item_list.append(item_obj)
-    def add_df(self, poke_obj):
-        self.df.append(poke_obj)
+    def add_df(self, codé_obj):
+        self.df.append(codé_obj)
 
 
-class Pokedex():
-    """Pokedex object. Will be used to make a dictionary of poke.
+class Codédex():
+    """codédex object. Will be used to make a dictionary of codé.
         
     Attributes:
-        pokedex: Catalog of poke info
+        codédex: Catalog of codé info
     """
     def __init__(self, fpath):
         with open(fpath, "r", encoding="UTF-8") as f:
-            self.pokedex = {}
+            self.codédex = {}
             reader = csv.reader(f)
             for line in reader:
                 name = line[0]
@@ -81,40 +85,42 @@ class Pokedex():
                 speed = line[5]
                 move1 = line[6]
                 move2 = line[7]
-                self.pokedex[name] = (type, atk, hp, int(defense), speed, move1, move2)
-                   
-    def get_poke(self, req_name):
-        """Poke object creator
+
+                self.codédex[name] = (type, atk, hp, int(defense), speed, move1, move2)
+            
+    def get_codé(self, req_name):
+        """codé object creator
         
         Args:
-            req_name: name of desired poke to create
+            req_name: name of desired codé to create
             
         Returns:
-            created poke object if req_name has a match"""
-        if req_name in self.pokedex:
-            req_name = Poke(req_name, 
-                            self.pokedex[req_name][0], 
-                            self.pokedex[req_name][1], 
-                            self.pokedex[req_name][2],
-                            self.pokedex[req_name][3], 
-                            self.pokedex[req_name][4],
-                            self.pokedex[req_name][5],
-                            self.pokedex[req_name][6])
+            created codé object if req_name has a match"""
+    
+        if req_name in self.codédex:
+            req_name = Codé(req_name, 
+                            self.codédex[req_name][0], 
+                            self.codédex[req_name][1], 
+                            self.codédex[req_name][2], 
+                            self.codédex[req_name][3], 
+                            self.codédex[req_name][4],
+                            self.codédex[req_name][5],
+                            self.codédex[req_name][6])
             return req_name
         else:
-            return "no such poke!"
+            return "no such Codémon!"
 
 
-class Poke():
-    """Poke object
+class Codé():
+    """Codé object
     
     Attributes:
-        name (str): the poke's name
-        type (str): the poke's type (water, fire, magic). decides effectiveness of attacks.
-        atk (int): the poke's attack stat, used to calculate damage
-        hp (int): the poke's hit points, impacted by damage or item
-        defense (int): the poke's defense stat, used to calculate damage
-        speed (int): the poke's speed stat
+        name (str): the codé's name
+        type (str): the codé's type (water, fire, magic). decides effectiveness of attacks.
+        atk (int): the codé's attack stat, used to calculate damage
+        hp (int): the codé's hit points, impacted by damage or item
+        defense (int): the codé's defense stat, used to calculate damage
+        speed (int): the codé's speed stat
         atk_list: list of attack names
     """
     def __init__(self, name, type, atk, hp, defense, speed, move1, move2):
@@ -133,6 +139,7 @@ class Poke():
 
         
 class ItemCatalog():
+
     """Creates dictionary of items from csv file, items can either heal
     or boost attack/defense. Item name will be the key, its value and it's
     a/d/h label will be in a tuple
@@ -150,10 +157,10 @@ class ItemCatalog():
         Side effects:
             self.item is populated with items in csv file
         """
-        with open(fpath, "w", encoding="utf-8") as wf:
-            empty_csv = {}
-            csv_writer = csv.writer(wf)
-            csv_writer.writerows(empty_csv)
+        # with open(fpath, "w", encoding="utf-8") as wf:
+        #     empty_csv = {}
+        #     csv_writer = csv.writer(wf)
+        #     csv_writer.writerows(empty_csv)
         with open(fpath, "r", encoding="utf-8") as f:
             self.itemcat = {}
             reader = csv.reader(f)
@@ -178,8 +185,6 @@ class ItemCatalog():
             item_name = Item(item_name, self.itemcat[item_name][0],
                              self.itemcat[item_name][1])
             return (f"{item_name}")
-        else:
-            return "no such item!"
 
 
 class Item():
@@ -208,24 +213,36 @@ class Item():
     def __repr__(self):
         return (f"{self.name}")
   
-    def use_item(self, poke):
-        """Adds values to poke stats based off type
+    def use_item(self, codé):
+        """Adds values to codé stats based off type
         
         Args:
-            poke: poke object using item
+            codé: codé object using item
         
         Side effects:
-            adds values to specified poke stats"""
+            adds values to specified codé stats"""
         
         if self.type == "h":
-            poke.hp += int(self.stat)
-            print(f"Health has increased by {self.stat} to {poke.hp}")
+            print()
+            sleep(1)
+            codé.hp += int(self.stat)
+            print(f"Health has increased by {self.stat} to {codé.hp}")
+            print()
+            sleep(1)
         elif self.type == "a":
-            poke.atk + int(self.stat)
-            print(f"Attack has increased by {self.stat} to {poke.atk}")     
+            print()
+            sleep(1)
+            codé.atk + int(self.stat)
+            print(f"Attack has increased by {self.stat} to {codé.atk}") 
+            print()
+            sleep(1)    
         elif self.type == "d":
-            poke.defense + int(self.stat)
-            print(f"Defense has increased by {self.stat} to {poke.defense}")
+            print()
+            sleep(1)
+            codé.defense + int(self.stat)
+            print(f"Defense has increased by {self.stat} to {codé.defense}")
+            print()
+            sleep(1)
            
         else:
             print('something here') #just for testing
@@ -242,71 +259,115 @@ def music_and_blurb(opponent):
     mixer.music.play(loops=-1)
 
 
-def battle(player, opponent):
-    '''Allows poke to choose an attack or an item.
+def battle(player, opponent, item):
+    '''Allows codé to choose an attack or an item.
+def battle(player, opponent, item_catalog):
+    Allows codé to choose an attack or an item.
     
     Side effects:
         prints "THE FIGHT BEGINS"
-        prints opponent's poke name
-        prints player's poke name
+        prints opponent's codé name
+        prints player's codé name
         prints prompt to choose attack or item or asks the user to choose attack/item
     '''
 
     music_and_blurb(opponent)
     
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
-    opponent_poke = opponent.poke_list[opponent.sel]
+    opponent_codé = opponent.codé_list[opponent.sel]
     
-    print(f"Your opponent, {opponent.name} sent out {opponent_poke}!\n")
-    choice_flag = False 
+    print(f"Your opponent, {opponent.name} sent out {opponent_codé}!\n")
+   
+    choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))
+    choice_flag = False
+    new = [codé.name.lower() for codé in player.codé_list]
     while choice_flag == False:
-        choice = (input(f"<Choose your Pokemon!>: {player.poke_list}:"))
-        for i in range(len(player.poke_list)):
-            if repr(player.poke_list[i]).lower() == choice.lower():
-                player.sel = i
-                player_poke = player.poke_list[player.sel] ## this seems redundant
-                temp_name = repr(player.poke_list[player.sel]) ## used because fstrings doesnt like repr()
-                choice_flag = True
-                print()
-                sleep(1)
-                print(f"{player.name} sent out {temp_name}!")
-                break
-            else:
-                print()
-                sleep(1)
-                print("~~> You picked a wrong pokemon, dingus.")
-                print()
-                sleep(1)             
-           
-    while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
-        update_stats("pokelist.csv", player)
-        pandas_table(choice, player)
+        if choice.lower() in new:
         
+            choice_flag = True
+            player_codé = player.codé_list[player.sel] 
+            temp_name = repr(player.codé_list[player.sel]) 
+            print()
+            sleep(1)
+            print(f"{player.name} sent out {temp_name}!")
+            
+            
+        else:
+            print()
+            sleep(1)
+            print("~~> You picked a wrong Codémon, dingus.")
+            print()                
+            sleep(1)
+            choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))
+            print(choice)
+                             
+           
+    while opponent.codé_list[opponent.sel].hp > 0 and player.codé_list[player.sel].hp > 0:
+        update_stats("codélist.csv", player)
+        pandas_table(choice, player)
+        print()
+        sleep(1)
         a_choice = input("<Attack or Item or Change?>: ")
         if a_choice.lower() == "attack":
-            a_choice = input(f"<Select attack>: {player.poke_list[player.sel].atk_list}: ")
-            if a_choice.lower() in player.poke_list[player.sel].atk_list:
+            print()
+            sleep(1)
+            a_choice = input(f"<Select attack>: {player.codé_list[player.sel].atk_list}: ")
+            if a_choice.lower() in player.codé_list[player.sel].atk_list:
                 print()
-                print(f"!!      {choice} attacks {opponent_poke}      !!")
+                print(f"!!      {choice} attacks {opponent_codé}      !!")
                 print(f"!!      {choice} used {a_choice}!       !!")
-                attack(player_poke, opponent_poke, a_choice)
+
+                attack(player_codé, opponent_codé, a_choice)
                 mixer.Channel(1).play(mixer.Sound("Slash.wav"))
+
+                attack(player_codé, opponent_codé, a_choice)
+
                 sleep(2)              
         elif a_choice.lower() == "item":
+            print()
+            sleep(1)
             i_choice = input(f"<Select item>: {player.item_list}: ")
-            i_choice = str(i_choice)
-            temp_list = []
-            for j in range(len(player.item_list)):
-                temp_list.append(player.item_list[j].name)
-            choice_flag = bool(check_select(i_choice, temp_list, choice_flag))
-            if choice_flag == True:
-                for i in range(len(temp_list)):
-                    if i_choice == player.item_list[i].name:
-                        player.item_list[i].use_item(player_poke)
-                        del player.item_list[i]
-                print()
+        
+            temp_list = [item for item in player.item_list]
+            if i_choice.lower() in temp_list:
+                
+                
+                    
+            
+                result = item.itemcat.get(i_choice)
+                
+                if result[1] == "h":
+                    Item(i_choice, result[0], result[1]).use_item(player_codé)
+                if result[1] == "a":
+                    Item(i_choice, result[0], result[1]).use_item(player_codé)
+                if result[1] == "d":
+                    Item(i_choice, result[0], result[1]).use_item(player_codé)
+            #     temp_list.append(player.item_list[j].name)
+            # choice_flag = bool(check_select(i_choice, temp_list, choice_flag))
+            # if choice_flag == True:
+                # for i in range(len(temp_list)):
+                #     if i_choice == player.item_list[i].name:
+                #         player.item_list[i].use_item(player_codé)
+                #         del player.item_list[i]
+                # print()
+    # choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))
+    # choice_flag = False
+    # new = [codé.name.lower() for codé in player.codé_list]
+    # while choice_flag == False:
+    #     if choice.lower() in new:
+        
+    #         choice_flag = True
+    #         player_codé = player.codé_list[player.sel] 
+    #         temp_name = repr(player.codé_list[player.sel]) 
+    #         print()
+    #         sleep(1)
+    #         print(f"{player.name} sent out {temp_name}!")
+                
+                
+
 
             else:
+                
                 print()
                 sleep(1)
                 print("~~>  You picked a wrong choice, dingus.")
@@ -317,7 +378,7 @@ def battle(player, opponent):
             sleep(1)
             print(f"        {player.name} decides its enough for {choice}!      ")
             print()
-            c_choice = input(f"<Choose your Pokemon!>: {player.poke_list}:")
+            c_choice = input(f"<Choose your Codémon!>: {player.codé_list}:")
             while c_choice:
                 if c_choice.lower() == "squittle":
                     print()
@@ -325,10 +386,10 @@ def battle(player, opponent):
                     print(f"!!      {player.name} sent out Squittle!        !!")
                     print()
                     sleep(1)
-                    choice = player.poke_list[0]
+                    choice = player.codé_list[0]
                     choice.atk_list = [choice.move1, choice.move2]
                     moves = choice.atk_list
-                    player_poke = player.poke_list[0]
+                    player_codé = player.codé_list[0]
                     break
                 elif c_choice.lower() == "magisaur":
                     print()
@@ -336,10 +397,10 @@ def battle(player, opponent):
                     print(f"!!      {player.name} sent out Magisaur!        !!")
                     print()
                     sleep(1)
-                    choice = player.poke_list[1]
+                    choice = player.codé_list[1]
                     choice.atk_list = [choice.move1, choice.move2]
                     moves = choice.atk_list
-                    player_poke = player.poke_list[1]
+                    player_codé = player.codé_list[1]
                     break
                 elif c_choice.lower() == "charmancer":
                     print()
@@ -347,53 +408,73 @@ def battle(player, opponent):
                     print(f"!!      {player.name} sent out Charmancer!      !!")
                     print()
                     sleep(1)
-                    choice = player.poke_list[2]
+                    choice = player.codé_list[2]
                     choice.atk_list = [choice.move1, choice.move2]
                     moves = choice.atk_list
-                    player_poke = player.poke_list[2]
+                    player_codé = player.codé_list[2]
                     break
                 else:
                     print()
                     sleep(1)
-                    print("~~>  You picked a wrong pokemon, dingus.")
+                    print("~~>  You picked a wrong Codémon, dingus.")
                     print()
                     sleep(1)
-                    break      
-        print(f"{opponent_poke} attacks {player_poke}.") #CPU turn
-        CPU_attack = opponent_select(opponent_poke.atk_list)
-        attack(opponent_poke, player_poke, CPU_attack)
+                    break 
+        else: 
+            print()
+            sleep(1)
+            print("~~>  You picked a wrong choice, dingus.")
+            print()
+            sleep(1)    
+
+        print(f"{opponent_codé} attacks {player_codé}.") #CPU turn
+        CPU_attack = opponent_select(opponent_codé.atk_list)
+        attack(opponent_codé, player_codé, CPU_attack)
         
-        if player.poke_list[player.sel].hp <= 0:
-            for i in range(len(player.poke_list)):
-                if player.poke_list[i].hp > 0:
-                    player_poke = player.poke_list[i]
+        if player.codé_list[player.sel].hp <= 0:
+            for i in range(len(player.codé_list)):
+                if player.codé_list[i].hp > 0:
+                    player_codé = player.codé_list[i]
                     player.sel = i
-                    print(f"{player.name} sent out {player.poke_list[i]}!")
+                    print(f"{player.name} sent out {player.codé_list[i]}!")
                     break        
             
-    if opponent.poke_list[opponent.sel].hp <= 0:
-        print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
-        print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
+    if opponent.codé_list[opponent.sel].hp <= 0:
+        print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
+        print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
         print(f"{player.name} wins!")
-    elif player.poke_list[player.sel].hp <= 0:
-        print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
-        print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
-        print(f"{player_poke} was knocked out... ")
+    elif player.codé_list[player.sel].hp <= 0:
+        print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
+        print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
+        print(f"{player_codé} was knocked out... ")
+        print(f"{opponent_codé} attacks {player_codé}.") #CPU turn
+        CPU_attack = opponent_select(opponent_codé.atk_list)
+        attack(opponent_codé, player_codé, CPU_attack)    
+            
+    if opponent.codé_list[opponent.sel].hp < 0:
+        print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
+        print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
+        print(f"{player.name} wins!")
+    elif player.codé_list[player.sel].hp < 0:
+            #something here to switch out codémon and continue battle
+        print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
+        print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
+        print(f"{player_codé} was knocked out... ")
         print()
         sleep(1)
         choice_flag = False 
         while choice_flag == False:
-            choice = (input(f"<Choose your Pokemon!>: {player.poke_list}:"))
+            choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))
             if choice.lower() == "squittle":
                 print()
                 sleep(1)
                 print(f"{player.name} sent out Squittle!")
                 print()
                 sleep(1)
-                choice = player.poke_list[0]
+                choice = player.codé_list[0]
                 choice.atk_list = [choice.move1, choice.move2]
                 moves = choice.atk_list
-                player_poke = player.poke_list[0]
+                player_codé = player.codé_list[0]
                 break
             elif choice.lower() == "magisaur":
                 print()
@@ -401,10 +482,10 @@ def battle(player, opponent):
                 print(f"{player.name} sent out Magisaur!")
                 print()
                 sleep(1)
-                choice = player.poke_list[1]
+                choice = player.codé_list[1]
                 choice.atk_list = [choice.move1, choice.move2]
                 moves = choice.atk_list
-                player_poke = player.poke_list[1]
+                player_codé = player.codé_list[1]
                 break
             elif choice.lower() == "charmancer":
                 print()
@@ -412,34 +493,25 @@ def battle(player, opponent):
                 print(f"{player.name} sent out Charmancer!")
                 print()
                 sleep(1)
-                choice = player.poke_list[2]
+                choice = player.codé_list[2]
                 choice.atk_list = [choice.move1, choice.move2]
                 moves = choice.atk_list
-                player_poke = player.poke_list[2]
+                player_codé = player.codé_list[2]
                 break
             else:
                 print()
                 sleep(1)
-                print("~~> You picked a wrong pokemon, dingus.")
+                print("~~> You picked a wrong codémon, dingus.")
                 print()
                 sleep(1)             
     else:
-        print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
-        print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
+        print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
+        print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
         print(f"DRAW") #just here for testing
     
 
 def update_stats(file, player):
-    '''Opens file, reads it, and writes new stats.
-    
-    Args:
-        file: filepath of items
-        player (obj): Poke object
-    
-    Side effects:
-        writes to filepath
-    
-    '''
+    ''''''
     with open(file, 'r+') as f:
         for line in f:
             if line[0] == player.name:
@@ -447,36 +519,27 @@ def update_stats(file, player):
                 line[3] = f.write(player.hp)
                 line[4] = f.write(player.defense)
                 line[5] = f.write(player.speed)
-                
 def pandas_table(choice, player):
-    '''Displays panda table of stats depending on which poke is selected.
     
-    Args:
-        choice (str): player poke choice
-        player (obj): Poke object
-        
-    Side effects:
-        prints poke_stats table'''
-    
-    df = pd.read_csv("pokelist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
+    df = pd.read_csv("codélist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
     #need to update CSV file when stats change 
     #https://www.geeksforgeeks.org/how-to-read-csv-file-with-pandas-without-header/
     df = df.iloc[:, 2:5]
         
-    if choice == player.poke_list[0]:
-        poke_stats = df.loc[[0]]
-        poke_stats = poke_stats.to_string(index = False)
+    if choice == player.codé_list[0]:
+        codé_stats = df.loc[[0]]
+        codé_stats = codé_stats.to_string(index = False)
         #https://stackoverflow.com/questions/24644656/how-to-print-pandas-dataframe-without-index
-    elif choice == player.poke_list[1]:
-        poke_stats = df.loc[[1]]
-        poke_stats = poke_stats.to_string(index = False)
-    elif choice == player.poke_list[2]:
-        poke_stats = df.loc[[2]]
-        poke_stats = poke_stats.to_string(index = False)
+    elif choice == player.codé_list[1]:
+        codé_stats = df.loc[[1]]
+        codé_stats = codé_stats.to_string(index = False)
+    elif choice == player.codé_list[2]:
+        codé_stats = df.loc[[2]]
+        codé_stats = codé_stats.to_string(index = False)
     else:
-        poke_stats = df.loc[[3]]
-        poke_stats = poke_stats.to_string(index = False)
-    print(poke_stats)
+        codé_stats = df.loc[[3]]
+        codé_stats = codé_stats.to_string(index = False)
+    print(codé_stats) #replace with return function?
 
 def opponent_select(list):
     '''Attack selection function for CPU player,
@@ -527,47 +590,48 @@ def check_select(choice, list, choice_flag):
     else:
         print("~~> Pick an option, dingus.")
         
-def attack(p_poke, o_poke, selected_attack):
-    """Deals damages based off of poke types and poke stats.
+def attack(p_codé, o_codé, selected_attack):
+    """Deals damages based off of codé types and codé stats.
     
     Args:
-        p_poke (obj): attacking poke
-        o_poke (obj): opposing poke
+        p_codé (obj): attacking codé
+        o_codé (obj): opposing codé
         selected_attack (string): name of selected attack, determines base strength
     
     Returns:
-        o_poke.hp = the opponent poke's modified hp
+        o_codé.hp = the opponent codé's modified hp
         
     Side effects:
         prints strings reporting attack and float of damage value
     """
-    if selected_attack == p_poke.atk_list[0]:
+    if selected_attack == p_codé.atk_list[0]:
         starting_power = 10
-    elif selected_attack == p_poke.atk_list[1]:
+
+    elif selected_attack == p_codé.atk_list[1]:
         starting_power = 20
-    damage = 0
     
-    if p_poke.type == "water" and o_poke.type == "fire":
+    
+    if p_codé.type == "water" and o_codé.type == "fire":
         
         damage = 1.6 * starting_power
         damage_type = "It's super effective!"
-    elif p_poke.type == "fire" and o_poke.type == "magic":
+    elif p_codé.type == "fire" and o_codé.type == "magic":
         
         damage_type = "It's super effective!"
         damage = 1.6 * starting_power
-    elif p_poke.type == "magic" and o_poke.type == "water":
+    elif p_codé.type == "magic" and o_codé.type == "water":
         
         damage_type = "It's super effective!"
         damage = 1.6 * starting_power
-    elif p_poke.type == "fire" and o_poke.type == "water":
+    elif p_codé.type == "fire" and o_codé.type == "water":
         
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
-    elif p_poke.type == "magic" and o_poke.type == "fire":
+    elif p_codé.type == "magic" and o_codé.type == "fire":
         
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
-    elif p_poke.type == "water" and o_poke.type == "magic":
+    elif p_codé.type == "water" and o_codé.type == "magic":
         
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
@@ -576,16 +640,16 @@ def attack(p_poke, o_poke, selected_attack):
         damage_type = ""
         damage = starting_power
         
-    damage = damage * (o_poke.defense / p_poke.atk)
-    o_poke.hp = o_poke.hp - damage
+    damage = damage * (o_codé.defense / p_codé.atk)
+    o_codé.hp = o_codé.hp - damage
 
     print(f"{damage_type}")
     print()
     sleep(1)
-    print(f"{o_poke} takes {damage} damage! {o_poke}'s HP is now {o_poke.hp}.")
+    print(f"{o_codé} takes {damage} damage! {o_codé}'s HP is now {o_codé.hp}.")
     print()
     sleep(1)
-    return o_poke.hp
+    return o_codé.hp
 
         
 if __name__ == '__main__':
