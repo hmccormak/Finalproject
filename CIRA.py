@@ -21,7 +21,9 @@ def main():
     player.add_item(item_catalog.get_item("stamp-fil-a"))
     player.add_item(item_catalog.get_item("cold pizza"))
     player.add_item(item_catalog.get_item("the best offense"))
-    cira = Trainer("Cira")
+    ## will move the long text to a file
+    cira_blurb = "\nAHAHAAAHAAAHA, DO YOU REALLY THINK YOU CAN DEFEAT ME WITH YOUR SPAGHETTI CODE?\n\nI CAN DESTROY YOUR GRADES IN THE BLINK OF AN EYE!\n\nYOUR PARENTS ARE GONNA FIND A PILE OF ONES AND ZEROS WHEN IM DONE WITH YOU!\n\nTL;DR:\nEAT EXCREMENT BUNDLES OF STICKS"
+    cira = Trainer("Cira", cira_blurb)
     cira.add_poke(pokedex.get_poke("Gradescope"))
     sleep(1)
     print(f"{player.name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
@@ -38,13 +40,13 @@ class Trainer():
         item_list (list): list of item objects (computer player will likely not use this)
         sel (int): index of poke list for selection
     """
-    def __init__(self, name):
+    def __init__(self, name, blurb=""):
         self.name = name
         self.poke_list = []
         self.item_list = []
         self.df = pd.DataFrame()
-        
         self.sel = 0
+        self.blurb = blurb
         
     def __repr__(self):
         return (f"{self.item_list}")
@@ -223,6 +225,16 @@ class Item():
         else:
             print('something here') #just for testing
 
+       
+def music_and_blurb(opponent):
+    mixer.init()
+    mixer.music.load("meg_intro.mp3")
+    mixer.music.play()
+    print(opponent.blurb)
+    sleep(13.5)
+    mixer.music.load("meg_loop.mp3")
+    mixer.music.play(loops=-1)
+
 
 def battle(player, opponent):
     '''Allows poke to choose an attack or an item.
@@ -236,9 +248,7 @@ def battle(player, opponent):
     
     '''
         
-    mixer.init()
-    mixer.music.load("MEGALOVANIA.mp3")
-    mixer.music.play(loops=-1)
+    music_and_blurb(opponent)
     
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     
@@ -369,18 +379,20 @@ def battle(player, opponent):
         print(f"{opponent_poke} attacks {player_poke}.") #CPU turn
         CPU_attack = opponent_select(opponent_poke.atk_list)
         attack(opponent_poke, player_poke, CPU_attack)
+        
+        if player.poke_list[player.sel].hp <= 0:
+            for i in range(len(player.poke_list)):
+                if player.poke_list[i].hp > 0:
+                    player_poke = player.poke_list[i]
+                    player.sel = i
+                    print(f"{player.name} sent out {player.poke_list[i]}!")
+                    break        
             
-            
-            
-    if opponent.poke_list[opponent.sel].hp < 0:
+    if opponent.poke_list[opponent.sel].hp <= 0:
         print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} wins!")
-    elif player.poke_list[player.sel].hp < 0:
-        for i in range(len(player.poke_list)):
-            if player.poke_list[i].hp > 0:
-                player_poke = player.poke_list[i]
-                print(f"{player.name} sent out {player.poke_list[i]}!")
+    elif player.poke_list[player.sel].hp <= 0:
         print(f"{opponent_poke}'s HP is {opponent.poke_list[opponent.sel].hp}.")
         print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"{player.name} loses!")
