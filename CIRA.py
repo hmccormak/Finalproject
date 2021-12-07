@@ -79,9 +79,7 @@ class Pokedex():
                 move1 = line[6]
                 move2 = line[7]
                 self.pokedex[name] = (type, atk, hp, int(defense), speed, move1, move2)
-        
-            
-                
+                   
     def get_poke(self, req_name):
         """Poke object creator
         
@@ -291,25 +289,9 @@ def battle(player, opponent, item_catalog):
             print()
             sleep(1)             
            
-    df = pd.read_csv("pokelist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
-    #need to update CSV file when stats change 
-    #https://www.geeksforgeeks.org/how-to-read-csv-file-with-pandas-without-header/
-    df = df.iloc[:, 2:5]    
     while opponent.poke_list[opponent.sel].hp > 0 and player.poke_list[player.sel].hp > 0:
-        if choice == player.poke_list[0]:
-            poke_stats = df.loc[[0]]
-            poke_stats = poke_stats.to_string(index = False)
-            #https://stackoverflow.com/questions/24644656/how-to-print-pandas-dataframe-without-index
-        elif choice == player.poke_list[1]:
-            poke_stats = df.loc[[1]]
-            poke_stats = poke_stats.to_string(index = False)
-        elif choice == player.poke_list[2]:
-            poke_stats = df.loc[[2]]
-            poke_stats = poke_stats.to_string(index = False)
-        else:
-            poke_stats = df.loc[[3]]
-            poke_stats = poke_stats.to_string(index = False)
-        print(poke_stats) #replace with return function?
+        update_stats("pokelist.csv", player)
+        pandas_table(choice, player)
         
         a_choice = input("<Attack or Item or Change?>: ")
         if a_choice.lower() == "attack":
@@ -457,6 +439,37 @@ def battle(player, opponent, item_catalog):
         print(f"{player_poke}'s HP is {player.poke_list[player.sel].hp}.")
         print(f"DRAW") #just here for testing
     
+
+def update_stats(file, player):
+    ''''''
+    with open(file, 'r+') as f:
+        for line in f:
+            if line[0] == player.name:
+                line[2] = f.write(player.atk)
+                line[3] = f.write(player.hp)
+                line[4] = f.write(player.defense)
+                line[5] = f.write(player.speed)
+def pandas_table(choice, player):
+    
+    df = pd.read_csv("pokelist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
+    #need to update CSV file when stats change 
+    #https://www.geeksforgeeks.org/how-to-read-csv-file-with-pandas-without-header/
+    df = df.iloc[:, 2:5]
+        
+    if choice == player.poke_list[0]:
+        poke_stats = df.loc[[0]]
+        poke_stats = poke_stats.to_string(index = False)
+        #https://stackoverflow.com/questions/24644656/how-to-print-pandas-dataframe-without-index
+    elif choice == player.poke_list[1]:
+        poke_stats = df.loc[[1]]
+        poke_stats = poke_stats.to_string(index = False)
+    elif choice == player.poke_list[2]:
+        poke_stats = df.loc[[2]]
+        poke_stats = poke_stats.to_string(index = False)
+    else:
+        poke_stats = df.loc[[3]]
+        poke_stats = poke_stats.to_string(index = False)
+    print(poke_stats) #replace with return function?
 
 def opponent_select(list):
     '''Attack selection function for CPU player,
