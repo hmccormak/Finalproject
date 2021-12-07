@@ -29,7 +29,7 @@ def main():
     sleep(1)
     print(f"{player.name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
-    battle(player, cira, item_catalog)
+    battle(player, cira)
 
 
 class Trainer():
@@ -263,45 +263,22 @@ def battle(player, opponent):
     choice_flag = False 
     while choice_flag == False:
         choice = (input(f"<Choose your Pokemon!>: {player.poke_list}:"))
-        if choice.lower() == "squittle":
-            print()
-            sleep(1)
-            print(f"{player.name} sent out Squittle!")
-            print()
-            sleep(1)
-            choice = player.poke_list[0]
-            choice.atk_list = [choice.move1, choice.move2]
-            moves = choice.atk_list
-            player_poke = player.poke_list[0]
-            break
-        elif choice.lower() == "magisaur":
-            print()
-            sleep(1)
-            print(f"{player.name} sent out Magisaur!")
-            print()
-            sleep(1)
-            choice = player.poke_list[1]
-            choice.atk_list = [choice.move1, choice.move2]
-            moves = choice.atk_list
-            player_poke = player.poke_list[1]
-            break
-        elif choice.lower() == "charmancer":
-            print()
-            sleep(1)
-            print(f"{player.name} sent out Charmancer!")
-            print()
-            sleep(1)
-            choice = player.poke_list[2]
-            choice.atk_list = [choice.move1, choice.move2]
-            moves = choice.atk_list
-            player_poke = player.poke_list[2]
-            break
-        else:
-            print()
-            sleep(1)
-            print("~~> You picked a wrong pokemon, dingus.")
-            print()
-            sleep(1)             
+        for i in range(len(player.poke_list)):
+            if repr(player.poke_list[i]).lower() == choice.lower():
+                player.sel = i
+                player_poke = player.poke_list[player.sel] ## this seems redundant
+                temp_name = repr(player.poke_list[player.sel]) ## used because fstrings doesnt like repr()
+                choice_flag = True
+                print()
+                sleep(1)
+                print(f"{player.name} sent out {temp_name}!")
+                break
+            else:
+                print()
+                sleep(1)
+                print("~~> You picked a wrong pokemon, dingus.")
+                print()
+                sleep(1)             
            
     df = pd.read_csv("pokelist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
     #need to update CSV file when stats change 
