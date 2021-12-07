@@ -317,7 +317,7 @@ def battle(player, opponent, item_catalog):
                 print(f"!!      {choice} used {a_choice}!       !!")
 
                 attack(player_codé, opponent_codé, a_choice)
-                mixer.Channel(1).play(mixer.Sound("Slash.wav"))
+                #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
 
                 attack(player_codé, opponent_codé, a_choice)
 
@@ -344,52 +344,27 @@ def battle(player, opponent, item_catalog):
                 print()
                 sleep(1)                
         elif a_choice.lower() == "change":
-            print()
-            sleep(1)
-            print(f"        {player.name} decides its enough for {choice}!      ")
-            print()
-            c_choice = input(f"<Choose your Codémon!>: {player.codé_list}:")
-            while c_choice:
-                if c_choice.lower() == "squittle":
-                    print()
-                    sleep(1)
-                    print(f"!!      {player.name} sent out Squittle!        !!")
-                    print()
-                    sleep(1)
-                    choice = player.codé_list[0]
-                    choice.atk_list = [choice.move1, choice.move2]
-                    moves = choice.atk_list
-                    player_codé = player.codé_list[0]
-                    break
-                elif c_choice.lower() == "magisaur":
-                    print()
-                    sleep(1)
-                    print(f"!!      {player.name} sent out Magisaur!        !!")
-                    print()
-                    sleep(1)
-                    choice = player.codé_list[1]
-                    choice.atk_list = [choice.move1, choice.move2]
-                    moves = choice.atk_list
-                    player_codé = player.codé_list[1]
-                    break
-                elif c_choice.lower() == "charmancer":
-                    print()
-                    sleep(1)
-                    print(f"!!      {player.name} sent out Charmancer!      !!")
-                    print()
-                    sleep(1)
-                    choice = player.codé_list[2]
-                    choice.atk_list = [choice.move1, choice.move2]
-                    moves = choice.atk_list
-                    player_codé = player.codé_list[2]
-                    break
+            change_flag = False
+            while change_flag == False:
+                print()
+                sleep(1)
+                print(f"        {player.name} decides its enough for {choice}!      ")
+                print()
+                c_choice = input(f"<Choose your Codémon!>: {player.codé_list}:")
+                temp_list = []
+                for i in range(len(player.codé_list)):
+                    temp_list.append(player.codé_list[i].name.lower())
+                if c_choice in temp_list:
+                    change_flag = True
+                    player.sel = i
+                    player_codé = player.codé_list[player.sel]
+                    print(f"{player.name} sent out {player_codé.name}!")   
                 else:
                     print()
                     sleep(1)
                     print("~~>  You picked a wrong Codémon, dingus.")
                     print()
-                    sleep(1)
-                    break 
+                    sleep(1) 
         else: 
             print()
             sleep(1)
@@ -505,7 +480,7 @@ def opponent_select(list):
         print()
         sleep(1)
         print(f"{list}~~> used {list[0]}!")
-        mixer.Channel(1).play(mixer.Sound("Slash.wav"))
+        #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
         print()
         sleep(1)
         return list[0]
@@ -513,7 +488,7 @@ def opponent_select(list):
         print()
         sleep(1)
         print(f"~~> used {list[1]}!")
-        mixer.Channel(1).play(mixer.Sound("Slash.wav"))
+        #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
         print()
         sleep(1)
         return list[1]     
