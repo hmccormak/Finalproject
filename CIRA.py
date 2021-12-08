@@ -267,7 +267,7 @@ def battle(player, opponent, item):
    
     choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))
     choice_flag = False
-    new = [codé.name.lower() for codé in player.codé_list] #did you get this online or come up with it yourself? we may need to cite
+    new = [codé.name.lower() for codé in player.codé_list]
    
     while choice_flag == False:
         if choice.lower() in new:
@@ -360,7 +360,6 @@ def battle(player, opponent, item):
             print()
             sleep(1)   
 
-
         if opponent_codé.hp > 0:
             print(f"{opponent_codé} attacks {player_codé}.") #CPU turn
             CPU_attack = opponent_select(opponent_codé.atk_list)
@@ -375,20 +374,20 @@ def battle(player, opponent, item):
                     break     
 
             
-    if opponent.codé_list[opponent.sel].hp <= 0:
-        print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
-        print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
+    if opponent_codé.hp <= 0:
+        print(f"{opponent_codé}'s HP is {opponent_codé.hp}.")
+        print(f"{player_codé}'s HP is {player_codé.hp}.")
         print(f"{player.name} wins!")
-    elif player.codé_list[player.sel].hp <= 0:
-        print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
-        print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
+    elif player.codé.hp <= 0:
+        print(f"{opponent_codé}'s HP is {opponent_codé.hp}.")
+        print(f"{player_codé}'s HP is {player_codé.hp}.")
         print(f"{player_codé} was knocked out... ")
         print()
         sleep(1)
         print(f"{player.name} lost!")            
     else:
-        print(f"{opponent_codé}'s HP is {opponent.codé_list[opponent.sel].hp}.")
-        print(f"{player_codé}'s HP is {player.codé_list[player.sel].hp}.")
+        print(f"{opponent_codé}'s HP is {opponent_codé.hp}.")
+        print(f"{player_codé}'s HP is {player_codé.hp}.")
         print(f"DRAW") #just here for testing
     
 
