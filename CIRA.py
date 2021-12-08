@@ -321,7 +321,8 @@ def battle(player, opponent, item):
                         if i_choice == player.item_list[i].name:
                             player.item_list[i].use_item(player_codé)
                             del player.item_list[i]
-                print()
+                            item_choice = True
+                            break
                 sleep(1)
             else:
                 print()
