@@ -224,21 +224,21 @@ class Item():
         if self.type == "h":
             print()
             sleep(1)
-            codé.hp += int(self.stat)
+            codé.hp = codé.hp + int(self.stat)
             print(f"Health has increased by {self.stat} to {codé.hp}")
             print()
             sleep(1)
         elif self.type == "a":
             print()
             sleep(1)
-            codé.atk + int(self.stat)
+            codé.atk = codé.atk + int(self.stat)
             print(f"Attack has increased by {self.stat} to {codé.atk}") 
             print()
             sleep(1)    
         elif self.type == "d":
             print()
             sleep(1)
-            codé.defense + int(self.stat)
+            codé.defense = codé.defense + int(self.stat)
             print(f"Defense has increased by {self.stat} to {codé.defense}")
             print()
             sleep(1)
@@ -302,10 +302,8 @@ def battle(player, opponent, item_catalog):
                              
            
     while opponent.codé_list[opponent.sel].hp > 0 and player.codé_list[player.sel].hp > 0:
-        update_stats("codélist.csv", player)
-        pandas_table(choice, player)
+        pandas_table(choice, player_codé) 
         print()
-        sleep(1)
         a_choice = input("<Attack or Item or Change?>: ")
         if a_choice.lower() == "attack":
             print()
@@ -368,7 +366,8 @@ def battle(player, opponent, item_catalog):
             sleep(1)
             print("~~>  You picked a wrong choice, dingus.")
             print()
-            sleep(1)    
+            sleep(1)   
+
 
         print(f"{opponent_codé} attacks {player_codé}.") #CPU turn
         CPU_attack = opponent_select(opponent_codé.atk_list)
@@ -402,34 +401,44 @@ def battle(player, opponent, item_catalog):
 
 def update_stats(file, player):
     ''''''
-    with open(file, 'r+') as f:
-        for line in f:
-            if line[0] == player.name:
-                line[2] = f.write(player.atk)
-                line[3] = f.write(player.hp)
-                line[4] = f.write(player.defense)
-                line[5] = f.write(player.speed)
+    
 def pandas_table(choice, player):
     
     df = pd.read_csv("codélist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
     #need to update CSV file when stats change 
     #https://www.geeksforgeeks.org/how-to-read-csv-file-with-pandas-without-header/
     df = df.iloc[:, 2:5]
-        
-    if choice == player.codé_list[0]:
+   
+    if choice == 'Squittle':
+        updated_hp = df.loc[0, 'HP'] = str(player.hp)
+        updated_atk = df.loc[0, 'Attack'] = str(player.atk)
+        updated_defense = df.loc[0, 'Defense'] = str(player.defense)
+        #https://stackoverflow.com/questions/24644656/how-to-print-pandas-dataframe-without-index
         codé_stats = df.loc[[0]]
         codé_stats = codé_stats.to_string(index = False)
-        #https://stackoverflow.com/questions/24644656/how-to-print-pandas-dataframe-without-index
-    elif choice == player.codé_list[1]:
+
+    elif choice == "Magisaur":
+        updated_hp = df.loc[1, 'HP'] = str(player.hp)
+        updated_atk = df.loc[1, 'Attack'] = str(player.atk)
+        updated_defense = df.loc[1, 'Defense'] = str(player.defense)
         codé_stats = df.loc[[1]]
         codé_stats = codé_stats.to_string(index = False)
-    elif choice == player.codé_list[2]:
+        
+    elif choice == "Charmancer":
+        updated_hp = df.loc[2, 'HP'] = str(player.hp)
+        updated_atk = df.loc[2, 'Attack'] = str(player.atk)
+        updated_defense = df.loc[2, 'Defense'] = str(player.defense)
         codé_stats = df.loc[[2]]
         codé_stats = codé_stats.to_string(index = False)
     else:
+        updated_hp = df.loc[3, 'HP'] = str(player.hp)
+        updated_atk = df.loc[3, 'Attack'] = str(player.atk)
+        updated_defense = df.loc[3, 'Defense'] = str(player.defense)
         codé_stats = df.loc[[3]]
         codé_stats = codé_stats.to_string(index = False)
-    print(codé_stats) #replace with return function?
+        
+    print(f"{player.name}'s stats:")
+    print(codé_stats)
 
 def opponent_select(list):
     '''Attack selection function for CPU player,
