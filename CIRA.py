@@ -307,23 +307,22 @@ def battle(player, opponent, item):
                 sleep(2)
             
         elif a_choice.lower() == "item":
-            i_choice = input(f"<Select item>: {player.item_list}: ")
-            i_choice = str(i_choice)
-            temp_list = []
-            for j in range(len(player.item_list)):
-                temp_list.append(player.item_list[j].name)
-            choice_flag = bool(check_select(i_choice, temp_list, choice_flag))
-            if choice_flag == True:
-                for i in range(len(temp_list)):
-                    if i_choice == player.item_list[i].name:
-                        player.item_list[i].use_item(player_codé)
-                        del player.item_list[i]
-                        break
-                print()
-            else:
+            item_choice = False
+            while item_choice == False:
+                i_choice = input(f"<Select item>: {player.item_list}: ")
+                i_choice = str(i_choice)
+                temp_list = []
+                for j in range(len(player.item_list)):
+                    temp_list.append(player.item_list[j].name)
+                choice_flag = bool(check_select(i_choice, temp_list, choice_flag))
+                if choice_flag == True:
+                    for i in range(len(temp_list)):
+                        if i_choice == player.item_list[i].name:
+                            player.item_list[i].use_item(player_codé)
+                            del player.item_list[i]
                 print()
                 sleep(1)
-                print("~~>  You picked a wrong choice, dingus.")
+            else:
                 print()
                 sleep(1)    
                             
