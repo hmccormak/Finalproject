@@ -258,7 +258,7 @@ def battle(player, opponent, item):
         prints prompt to choose attack or item or asks the user to choose attack/item
     '''
 
-    #music_and_blurb(opponent)
+    music_and_blurb(opponent)
     
     print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
     opponent_codé = opponent.codé_list[opponent.sel]
@@ -283,7 +283,7 @@ def battle(player, opponent, item):
         else:
             print()
             sleep(1)
-            print("~~> You picked a wrong Codémon, dingus.")
+            print("~~>  You picked a wrong Codémon, dingus.")
             print()                
             sleep(1)
             choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))
@@ -300,11 +300,13 @@ def battle(player, opponent, item):
             a_choice = input(f"<Select attack>: {player.codé_list[player.sel].atk_list}: ")
             if a_choice.lower() in player.codé_list[player.sel].atk_list:
                 print()
-                print(f"!!      {choice} attacks {opponent_codé}      !!")
-                print(f"!!      {choice} used {a_choice}!       !!")
-
+                print(f"{choice} attacks {opponent_codé}!")
+                print()
+                sleep(1)
+                print(f"~~>  {choice} used {a_choice}!")
+                mixer.Channel(1).play(mixer.Sound("Slash.wav"))
                 attack(player_codé, opponent_codé, a_choice)
-                #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
+                
                 sleep(2)
             
         elif a_choice.lower() == "item":
@@ -333,7 +335,7 @@ def battle(player, opponent, item):
             while change_flag == False:
                 print()
                 sleep(1)
-                print(f"        {player.name} decides its enough for {choice}!      ")
+                print(f"{player.name} decides its enough for {choice}!")
                 print()
                 c_choice = input(f"<Choose your Codémon!>: {player.codé_list}:")
                 temp_list = []
@@ -363,13 +365,18 @@ def battle(player, opponent, item):
         if opponent_codé.hp > 0:
             print(f"{opponent_codé} attacks {player_codé}.") #CPU turn
             CPU_attack = opponent_select(opponent_codé.atk_list)
+            mixer.Channel(1).play(mixer.Sound("Slash.wav"))
             attack(opponent_codé, player_codé, CPU_attack)
+            
         
         if player.codé_list[player.sel].hp <= 0:
             for i in range(len(player.codé_list)):
                 if player.codé_list[i].hp > 0:
                     player_poke = player.codé_list[i]
                     player.sel = i
+                    print(f"{player.codé_list[player.sel]} was knocked out...")
+                    print()
+                    sleep(1)
                     print(f"{player.name} sent out {player.codé_list[i]}!")
                     break     
 
