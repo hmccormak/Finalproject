@@ -272,6 +272,9 @@ def battle(player, opponent, item):
     while choice_flag == False:
         if choice.lower() in new:
             choice_flag = True
+            for i in range(len(new)):
+                if choice == new[i]:
+                    player.sel = i
             player_codé = player.codé_list[player.sel] 
             temp_name = repr(player.codé_list[player.sel]) 
             print()
