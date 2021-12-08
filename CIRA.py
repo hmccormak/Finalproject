@@ -28,8 +28,6 @@ def main():
     cira_blurb = "\nAHAHAAAHAAAHA, DO YOU REALLY THINK YOU CAN DEFEAT ME WITH YOUR SPAGHETTI CODE?\n\nI CAN DESTROY YOUR GRADES IN THE BLINK OF AN EYE!\n\nYOUR PARENTS ARE GONNA FIND A PILE OF ONES AND ZEROS WHEN IM DONE WITH YOU!\n\nTL;DR:\nEAT EXCREMENT BUNDLES OF STICKS"
     cira = Trainer("Cira", cira_blurb)
     cira.add_codé(codédex.get_codé("Gradescope"))
-    cira = Trainer("Cira") #two instances of cira trainer?
-    cira.add_codé(codédex.get_codé("Gradescope")) #two instances?
     sleep(1)
     print(f"{player.name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
@@ -51,7 +49,7 @@ class Trainer():
         self.codé_list = []
         self.item_list = []
         self.sel = 0
-        self.blurb = blurb #what is this for
+        self.blurb = blurb # intro dialogue for CIRA to pad out music intro
         
     def __repr__(self):
         return (f"{self.item_list}")
