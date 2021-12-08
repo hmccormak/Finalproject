@@ -28,8 +28,6 @@ def main():
     cira_blurb = "\nAHAHAAAHAAAHA, DO YOU REALLY THINK YOU CAN DEFEAT ME WITH YOUR SPAGHETTI CODE?\n\nI CAN DESTROY YOUR GRADES IN THE BLINK OF AN EYE!\n\nYOUR PARENTS ARE GONNA FIND A PILE OF ONES AND ZEROS WHEN IM DONE WITH YOU!\n\nTL;DR:\nEAT EXCREMENT BUNDLES OF STICKS"
     cira = Trainer("Cira", cira_blurb)
     cira.add_codé(codédex.get_codé("Gradescope"))
-    cira = Trainer("Cira") #two instances of cira trainer?
-    cira.add_codé(codédex.get_codé("Gradescope")) #two instances?
     sleep(1)
     print(f"{player.name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
@@ -51,7 +49,7 @@ class Trainer():
         self.codé_list = []
         self.item_list = []
         self.sel = 0
-        self.blurb = blurb #what is this for
+        self.blurb = blurb # intro dialogue for CIRA to pad out music intro
         
     def __repr__(self):
         return (f"{self.item_list}")
@@ -274,6 +272,9 @@ def battle(player, opponent, item):
     while choice_flag == False:
         if choice.lower() in new:
             choice_flag = True
+            for i in range(len(new)):
+                if choice == new[i]:
+                    player.sel = i
             player_codé = player.codé_list[player.sel] 
             temp_name = repr(player.codé_list[player.sel]) 
             print()
@@ -320,7 +321,8 @@ def battle(player, opponent, item):
                         if i_choice == player.item_list[i].name:
                             player.item_list[i].use_item(player_codé)
                             del player.item_list[i]
-                print()
+                            item_choice = True
+                            break
                 sleep(1)
             else:
                 print()
@@ -355,7 +357,8 @@ def battle(player, opponent, item):
             print()
             sleep(1)   
 
-        if opponent.codé_list[opponent.sel].hp > 0:
+
+        if opponent_codé.hp > 0:
             print(f"{opponent_codé} attacks {player_codé}.") #CPU turn
             CPU_attack = opponent_select(opponent_codé.atk_list)
             attack(opponent_codé, player_codé, CPU_attack)
@@ -444,22 +447,13 @@ def opponent_select(atk_list):
         Randomly selected attack from atk_list'''
         
     attack_selection = randint(0,1)
-    if attack_selection == 0:
-        print()
-        sleep(1)
-        print(f"~~> used {atk_list[0]}!")
-        #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
-        print()
-        sleep(1)
-        return atk_list[0]
-    if attack_selection == 1:
-        print()
-        sleep(1)
-        print(f"~~> used {atk_list[1]}!")
-        #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
-        print()
-        sleep(1)
-        return atk_list[1]     
+    print()
+    sleep(1)
+    print(f"~~> used {atk_list[attack_selection]}!")
+    #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
+    print()
+    sleep(1)
+    return atk_list[attack_selection]    
             
 def check_select(choice, battle_list, choice_flag):
     '''Identifies the player and opponent's selections.
