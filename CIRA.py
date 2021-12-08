@@ -303,6 +303,7 @@ def battle(player, opponent, item_catalog):
            
     while opponent.codé_list[opponent.sel].hp > 0 and player.codé_list[player.sel].hp > 0:
         pandas_table(choice, player_codé) 
+        
         print()
         a_choice = input("<Attack or Item or Change?>: ")
         if a_choice.lower() == "attack":
@@ -399,9 +400,6 @@ def battle(player, opponent, item_catalog):
         print(f"DRAW") #just here for testing
     
 
-def update_stats(file, player):
-    ''''''
-    
 def pandas_table(choice, player):
     
     df = pd.read_csv("codélist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
