@@ -341,9 +341,12 @@ def battle(player, opponent, item):
                     temp_list.append(player.codé_list[i].name.lower())
                 if c_choice in temp_list:
                     change_flag = True
-                    player.sel = i
-                    player_codé = player.codé_list[player.sel]
-                    print(f"{player.name} sent out {player_codé.name}!")   
+                    for j in range(len(player.codé_list)):
+                        if c_choice == repr(player.codé_list[j]).lower():
+                            player.sel = j
+                            player_codé = player.codé_list[player.sel]
+                            print(f"{player.name} sent out {player_codé.name}!")
+                            break  
                 else:
                     print()
                     sleep(1)
