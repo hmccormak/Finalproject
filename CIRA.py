@@ -240,6 +240,7 @@ class Item():
             print('use_item is not working') #just for testing
             
 def music_and_blurb(opponent):
+    ''''''
     mixer.init()
     mixer.music.load("meg_intro.mp3")
     mixer.music.play()
@@ -250,9 +251,7 @@ def music_and_blurb(opponent):
 
 
 def battle(player, opponent, item):
-    '''Allows codé to choose an attack or an item.
-def battle(player, opponent, item_catalog):
-    Allows codé to choose an attack or an item.
+    '''Allows codé to choose an attack, item, or new codé.
     
     Side effects:
         prints "THE FIGHT BEGINS"
@@ -270,18 +269,16 @@ def battle(player, opponent, item_catalog):
    
     choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))
     choice_flag = False
-    new = [codé.name.lower() for codé in player.codé_list]
+    new = [codé.name.lower() for codé in player.codé_list] #did you get this online or come up with it yourself? we may need to cite
+   
     while choice_flag == False:
         if choice.lower() in new:
-        
             choice_flag = True
             player_codé = player.codé_list[player.sel] 
             temp_name = repr(player.codé_list[player.sel]) 
             print()
             sleep(1)
             print(f"{player.name} sent out {temp_name}!")
-            
-            
         else:
             print()
             sleep(1)
@@ -289,13 +286,12 @@ def battle(player, opponent, item_catalog):
             print()                
             sleep(1)
             choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))
-            print(choice)
-                             
+            print(choice)                      
            
     while opponent.codé_list[opponent.sel].hp > 0 and player.codé_list[player.sel].hp > 0:
         pandas_table(choice, player_codé) 
-        
         print()
+        
         a_choice = input("<Attack or Item or Change?>: ")
         if a_choice.lower() == "attack":
             print()
@@ -325,12 +321,12 @@ def battle(player, opponent, item_catalog):
                         break
                 print()
             else:
-                
                 print()
                 sleep(1)
                 print("~~>  You picked a wrong choice, dingus.")
                 print()
-                sleep(1)                
+                sleep(1)    
+                            
         elif a_choice.lower() == "change":
             change_flag = False
             while change_flag == False:
@@ -439,9 +435,8 @@ def pandas_table(choice, codé):
     print(f"{codé.name}'s stats:")
     print(codé_stats)
 
-def opponent_select(list):
-    '''Attack selection function for CPU player,
-    attack is selected at random
+def opponent_select(atk_list):
+    '''Attack selection function for CPU player. Attack is selected at random.
     
     Args:
         list: list of attacks
@@ -452,19 +447,19 @@ def opponent_select(list):
     if attack_selection == 0:
         print()
         sleep(1)
-        print(f"~~> used {list[0]}!")
+        print(f"~~> used {atk_list[0]}!")
         #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
         print()
         sleep(1)
-        return list[0]
+        return atk_list[0]
     if attack_selection == 1:
         print()
         sleep(1)
-        print(f"~~> used {list[1]}!")
+        print(f"~~> used {atk_list[1]}!")
         #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
         print()
         sleep(1)
-        return list[1]     
+        return atk_list[1]     
             
 def check_select(choice, list, choice_flag):
     '''Identifies the player and opponent's selections.
