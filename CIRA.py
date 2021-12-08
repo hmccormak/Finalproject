@@ -442,22 +442,13 @@ def opponent_select(atk_list):
         Randomly selected attack from atk_list'''
         
     attack_selection = randint(0,1)
-    if attack_selection == 0:
-        print()
-        sleep(1)
-        print(f"~~> used {atk_list[0]}!")
-        #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
-        print()
-        sleep(1)
-        return atk_list[0]
-    if attack_selection == 1:
-        print()
-        sleep(1)
-        print(f"~~> used {atk_list[1]}!")
-        #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
-        print()
-        sleep(1)
-        return atk_list[1]     
+    print()
+    sleep(1)
+    print(f"~~> used {atk_list[attack_selection]}!")
+    #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
+    print()
+    sleep(1)
+    return atk_list[attack_selection]    
             
 def check_select(choice, battle_list, choice_flag):
     '''Identifies the player and opponent's selections.
