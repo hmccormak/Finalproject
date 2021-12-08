@@ -9,8 +9,9 @@ import csv
 import pandas as pd
 
 def main():
-    """Main function for the codémon game,
+    """Main function for the Codémon game,
     please don't sue us, nintendo"""
+    
     codédex = Codédex("codélist.csv")
     item = ItemCatalog("itemlist.csv")
     player = (input("What is your name?: "))
@@ -27,8 +28,8 @@ def main():
     cira_blurb = "\nAHAHAAAHAAAHA, DO YOU REALLY THINK YOU CAN DEFEAT ME WITH YOUR SPAGHETTI CODE?\n\nI CAN DESTROY YOUR GRADES IN THE BLINK OF AN EYE!\n\nYOUR PARENTS ARE GONNA FIND A PILE OF ONES AND ZEROS WHEN IM DONE WITH YOU!\n\nTL;DR:\nEAT EXCREMENT BUNDLES OF STICKS"
     cira = Trainer("Cira", cira_blurb)
     cira.add_codé(codédex.get_codé("Gradescope"))
-    cira = Trainer("Cira")
-    cira.add_codé(codédex.get_codé("Gradescope"))
+    cira = Trainer("Cira") #two instances of cira trainer?
+    cira.add_codé(codédex.get_codé("Gradescope")) #two instances?
     sleep(1)
     print(f"{player.name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
@@ -36,21 +37,21 @@ def main():
 
 
 class Trainer():
-    """Trainer object for both human and CPU players
+    """Trainer object for both human and CPU players.
     
     Attributes:
-        name (string): trainer name
+        name (str): trainer name
         codé_list (list): list of codé objects
         item_list (list): list of item objects (computer player will likely not use this)
         sel (int): index of codé list for selection
+        blurb (str): 
     """
     def __init__(self, name, blurb=""):
         self.name = name
         self.codé_list = []
         self.item_list = []
-        self.df = pd.DataFrame()
         self.sel = 0
-        self.blurb = blurb
+        self.blurb = blurb #what is this for
         
     def __repr__(self):
         return (f"{self.item_list}")
@@ -58,18 +59,18 @@ class Trainer():
     def add_codé(self, codé_obj):
         self.codé_list.append(codé_obj)
         
-        
     def add_item(self, item_obj):
         self.item_list.append(item_obj)
-    def add_df(self, codé_obj):
+        
+    def add_df(self, codé_obj): #do we still need this if not doing pandas here
         self.df.append(codé_obj)
 
 
 class Codédex():
-    """codédex object. Will be used to make a dictionary of codé.
+    """Codédex object. Will be used to make a dictionary of codé.
         
     Attributes:
-        codédex: Catalog of codé info
+        codédex: Dictionary catalog of codé info
     """
     def __init__(self, fpath):
         with open(fpath, "r", encoding="UTF-8") as f:
@@ -88,7 +89,7 @@ class Codédex():
                 self.codédex[name] = (type, atk, hp, int(defense), speed, move1, move2)
             
     def get_codé(self, req_name):
-        """codé object creator
+        """Codé object creator
         
         Args:
             req_name: name of desired codé to create
@@ -107,7 +108,7 @@ class Codédex():
                             self.codédex[req_name][6])
             return req_name
         else:
-            return "no such Codémon!"
+            return "No such Codémon!"
 
 
 class Codé():
@@ -128,7 +129,7 @@ class Codé():
         self.atk = int(atk)
         self.hp = int(hp)
         self.defense = int(defense)
-        self.speed = int(speed)
+        self.speed = int(speed) #do we need this? not in pandas display
         self.move1 = move1
         self.move2 = move2
         self.atk_list = [self.move1, self.move2]
@@ -141,14 +142,15 @@ class ItemCatalog():
 
     """Creates dictionary of items from csv file, items can either heal
     or boost attack/defense. Item name will be the key, its value and it's
-    a/d/h label will be in a tuple
+    a/d/h label will be in a tuple.
     
     Attributes:
         itemcat: dictionary of items  
     """
+    
     def __init__(self, fpath):
         """Method that opens a csv file and catergorizes the items by its name,
-        stat and type of item
+        stat and type of item.
 
         Args:
             fpath (string): the path to the csv file
@@ -169,10 +171,8 @@ class ItemCatalog():
                self.type = line[2]
                self.itemcat[self.name] = (self.points, self.type)
             
-               
-
     def get_item(self, item_name):
-        """Gets item info from catalog and creates item object
+        """Gets item info from catalog and creates Item object
         
         Args:
             item_name (str): name of item
@@ -187,24 +187,14 @@ class ItemCatalog():
 
 
 class Item():
-    """item object for items in the players inventory
+    """Item object for items in the players inventory.
     
     Attributes:
         name (str): name of item
         stat (int): points assigned to item
-        type (char): char of a/d/h to denote type
+        type (str): str of a/d/h to denote type
     """
     def __init__(self, name, stat, type):
-        """Method that populates the item attributes.
-        Args:
-            name(string):the name of the item
-            stat(int): the amount of points an item aids the player
-            type(string): the type of item (attack/deffense/attack)
-        Side effects:
-            self.name populates with name of item
-            self.stat populates the stat of an item
-            self.type populates the type of an item
-        """
         self.name = name
         self.stat = int(stat)
         self.type = type
@@ -219,7 +209,10 @@ class Item():
             codé: codé object using item
         
         Side effects:
-            adds values to specified codé stats"""
+            Alters values to specified codé stat attribute
+            Prints empty spaces
+            Prints f-string with stat updates
+        """
         
         if self.type == "h":
             print()
@@ -244,10 +237,8 @@ class Item():
             sleep(1)
            
         else:
-            print('something here') #just for testing
+            print('use_item is not working') #just for testing
             
-
-       
 def music_and_blurb(opponent):
     mixer.init()
     mixer.music.load("meg_intro.mp3")
@@ -408,7 +399,8 @@ def pandas_table(choice, codé):
         player (obj): Codé object
     
     Side effects:
-        prints
+        Prints codé's stats
+        Modifies dataframe #is this a necessary side effect?
     '''
     
     df = pd.read_csv("codélist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
