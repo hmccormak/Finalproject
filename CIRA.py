@@ -269,7 +269,7 @@ def battle(player, opponent, item):
    
     choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))
     choice_flag = False
-    new = [codé.name.lower() for codé in player.codé_list] #did you get this online or come up with it yourself? we may need to cite
+    new = [codé.name.lower() for codé in player.codé_list]
    
     while choice_flag == False:
         if choice.lower() in new:
