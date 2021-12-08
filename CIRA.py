@@ -357,9 +357,10 @@ def battle(player, opponent, item):
             sleep(1)   
 
 
-        print(f"{opponent_codé} attacks {player_codé}.") #CPU turn
-        CPU_attack = opponent_select(opponent_codé.atk_list)
-        attack(opponent_codé, player_codé, CPU_attack)
+        if opponent_codé.hp > 0:
+            print(f"{opponent_codé} attacks {player_codé}.") #CPU turn
+            CPU_attack = opponent_select(opponent_codé.atk_list)
+            attack(opponent_codé, player_codé, CPU_attack)
         
         if player.codé_list[player.sel].hp <= 0:
             for i in range(len(player.codé_list)):
