@@ -439,10 +439,11 @@ def opponent_select(atk_list):
     '''Attack selection function for CPU player. Attack is selected at random.
     
     Args:
-        list: list of attacks
+        atl_list: list of attacks
     
     Returns:
-        Randomly selected attack'''
+        Randomly selected attack from atk_list'''
+        
     attack_selection = randint(0,1)
     if attack_selection == 0:
         print()
@@ -461,7 +462,7 @@ def opponent_select(atk_list):
         sleep(1)
         return atk_list[1]     
             
-def check_select(choice, list, choice_flag):
+def check_select(choice, battle_list, choice_flag):
     '''Identifies the player and opponent's selections.
     
     Args:
@@ -476,7 +477,7 @@ def check_select(choice, list, choice_flag):
         prints which item/attack the player chose
         prints a prompt if the player makes the wrong selection'''
         
-    if str(choice) in list:
+    if str(choice) in battle_list:
         print(f"~~> used {choice}!")
         choice_flag = True
         return (choice_flag)
@@ -495,41 +496,35 @@ def attack(p_codé, o_codé, selected_attack):
         o_codé.hp = the opponent codé's modified hp
         
     Side effects:
-        prints strings reporting attack and float of damage value
+        Alters hp attribute of Codé object
+        Prints strings reporting attack and float of damage value
     """
     if selected_attack == p_codé.atk_list[0]:
         starting_power = 10
 
-    elif selected_attack == p_codé.atk_list[1]:
+    elif selected_attack == p_codé.atk_list[1]: #should this elif be an else statement
         starting_power = 20
     
     
     if p_codé.type == "water" and o_codé.type == "fire":
-        
         damage = 1.6 * starting_power
         damage_type = "It's super effective!"
     elif p_codé.type == "fire" and o_codé.type == "magic":
-        
         damage_type = "It's super effective!"
         damage = 1.6 * starting_power
     elif p_codé.type == "magic" and o_codé.type == "water":
-        
         damage_type = "It's super effective!"
         damage = 1.6 * starting_power
     elif p_codé.type == "fire" and o_codé.type == "water":
-        
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
     elif p_codé.type == "magic" and o_codé.type == "fire":
-        
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
     elif p_codé.type == "water" and o_codé.type == "magic":
-        
         damage_type = "It's not very effective..."
         damage = .625 * starting_power
     else:
-        
         damage_type = ""
         damage = starting_power
         
