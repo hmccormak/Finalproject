@@ -400,7 +400,16 @@ def battle(player, opponent, item_catalog):
         print(f"DRAW") #just here for testing
     
 
-def pandas_table(choice, player):
+def pandas_table(choice, codé):
+    '''Updates and player's codé's stats during battle.
+    
+    Args:
+        choice (str): Codé name
+        player (obj): Codé object
+    
+    Side effects:
+        prints
+    '''
     
     df = pd.read_csv("codélist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
     #need to update CSV file when stats change 
@@ -408,34 +417,34 @@ def pandas_table(choice, player):
     df = df.iloc[:, 2:5]
    
     if choice == 'Squittle':
-        updated_hp = df.loc[0, 'HP'] = str(player.hp)
-        updated_atk = df.loc[0, 'Attack'] = str(player.atk)
-        updated_defense = df.loc[0, 'Defense'] = str(player.defense)
+        updated_hp = df.loc[0, 'HP'] = str(codé.hp)
+        updated_atk = df.loc[0, 'Attack'] = str(codé.atk)
+        updated_defense = df.loc[0, 'Defense'] = str(codé.defense)
         #https://stackoverflow.com/questions/24644656/how-to-print-pandas-dataframe-without-index
         codé_stats = df.loc[[0]]
         codé_stats = codé_stats.to_string(index = False)
 
     elif choice == "Magisaur":
-        updated_hp = df.loc[1, 'HP'] = str(player.hp)
-        updated_atk = df.loc[1, 'Attack'] = str(player.atk)
-        updated_defense = df.loc[1, 'Defense'] = str(player.defense)
+        updated_hp = df.loc[1, 'HP'] = str(codé.hp)
+        updated_atk = df.loc[1, 'Attack'] = str(codé.atk)
+        updated_defense = df.loc[1, 'Defense'] = str(codé.defense)
         codé_stats = df.loc[[1]]
         codé_stats = codé_stats.to_string(index = False)
         
     elif choice == "Charmancer":
-        updated_hp = df.loc[2, 'HP'] = str(player.hp)
-        updated_atk = df.loc[2, 'Attack'] = str(player.atk)
-        updated_defense = df.loc[2, 'Defense'] = str(player.defense)
+        updated_hp = df.loc[2, 'HP'] = str(codé.hp)
+        updated_atk = df.loc[2, 'Attack'] = str(codé.atk)
+        updated_defense = df.loc[2, 'Defense'] = str(codé.defense)
         codé_stats = df.loc[[2]]
         codé_stats = codé_stats.to_string(index = False)
     else:
-        updated_hp = df.loc[3, 'HP'] = str(player.hp)
-        updated_atk = df.loc[3, 'Attack'] = str(player.atk)
-        updated_defense = df.loc[3, 'Defense'] = str(player.defense)
+        updated_hp = df.loc[3, 'HP'] = str(codé.hp)
+        updated_atk = df.loc[3, 'Attack'] = str(codé.atk)
+        updated_defense = df.loc[3, 'Defense'] = str(codé.defense)
         codé_stats = df.loc[[3]]
         codé_stats = codé_stats.to_string(index = False)
         
-    print(f"{player.name}'s stats:")
+    print(f"{codé.name}'s stats:")
     print(codé_stats)
 
 def opponent_select(list):
