@@ -411,7 +411,6 @@ def pandas_table(choice, codé):
     '''
     
     df = pd.read_csv("codélist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
-    #need to update CSV file when stats change 
     #https://www.geeksforgeeks.org/how-to-read-csv-file-with-pandas-without-header/
     df = df.iloc[:, 2:5]
    
