@@ -324,7 +324,7 @@ def battle(player, opponent):
         elif a_choice.lower() == "item":
             item_choice = False
             while item_choice == False:
-                i_choice = input(f"<Select item>: {player.itemh_list}: ")
+                i_choice = input(f"<Select item>: {player.item_list}: ")
                 i_choice = str(i_choice)
                 temp_list = []
                 for j in range(len(player.item_list)):
