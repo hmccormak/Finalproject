@@ -309,10 +309,10 @@ def battle(player, opponent):
                 if a_choice.lower() in player.codé_list[player.sel].atk_list:
                     attack_flag = True
                     print()
-                    print(f"{choice} attacks {opponent_codé}!")
+                    print(f"{player_codé} attacks {opponent_codé}!")
                     print()
                     sleep(1)
-                    print(f"~~>  {choice} used {a_choice}!")
+                    print(f"~~>  {player_codé} used {a_choice}!")
                     mixer.Channel(1).play(mixer.Sound("Slash.wav"))
                     attack(player_codé, opponent_codé, a_choice)
                     sleep(2)
@@ -324,7 +324,7 @@ def battle(player, opponent):
         elif a_choice.lower() == "item":
             item_choice = False
             while item_choice == False:
-                i_choice = input(f"<Select item>: {player.item_list}: ")
+                i_choice = input(f"<Select item>: {player.itemh_list}: ")
                 i_choice = str(i_choice)
                 temp_list = []
                 for j in range(len(player.item_list)):
