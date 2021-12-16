@@ -455,10 +455,11 @@ def opponent_select(atk_list):
     '''Attack selection function for CPU player. Attack is selected at random.
     
     Args:
-        atl_list: list of attacks
+        atk_list: list of attacks
     
     Returns:
-        Randomly selected attack from atk_list'''
+        Randomly selected attack from atk_list
+    '''
         
     attack_selection = randint(0,1)
     print()
@@ -482,7 +483,8 @@ def check_select(choice, battle_list, choice_flag):
         
     Side effects:
         prints which item/attack the player chose
-        prints a prompt if the player makes the wrong selection'''
+        prints a prompt if the player makes the wrong selection
+    '''
         
     if str(choice) in battle_list:
         print(f"~~> used {choice}!")
@@ -495,12 +497,12 @@ def attack(p_codé, o_codé, selected_attack):
     """Deals damages based off of codé types and codé stats.
     
     Args:
-        p_codé (obj): attacking codé
-        o_codé (obj): opposing codé
-        selected_attack (string): name of selected attack, determines base strength
+        p_codé (Codé): attacking codé
+        o_codé (Codé): opposing codé
+        selected_attack (str): name of selected attack, determines base strength
     
     Returns:
-        o_codé.hp = the opponent codé's modified hp
+        o_codé.hp (str): the opponent codé's modified hp
         
     Side effects:
         Alters hp attribute of Codé object
