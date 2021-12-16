@@ -31,7 +31,7 @@ def main():
     sleep(1)
     print(f"{player.name} steps into the Hornblake dungeons, ready to break the curse of CIRA once and for all!")
     sleep(2)
-    battle(player, cira, item)
+    battle(player, cira)
 
 
 class Trainer():
@@ -248,19 +248,24 @@ def music_and_blurb(opponent):
     mixer.music.play(loops=-1)
 
 
-def battle(player, opponent, item):
+def battle(player, opponent):
     '''Allows codé to choose an attack, item, or new codé.
+
+    Args:
+        player: the player trainer object
+        opponent: the opponent trainer object
     
     Side effects:
         prints "THE FIGHT BEGINS"
         prints opponent's codé name
         prints player's codé name
         prints prompt to choose attack or item or asks the user to choose attack/item
+        print a result if the player has won, lost, or came to a draw
     '''
 
     music_and_blurb(opponent)
     
-    print("\n\n--++==## THE FIGHT BEGINS ##==++--\n")
+    print("\n\n--==++## THE FIGHT BEGINS ##++==--\n")
     opponent_codé = opponent.codé_list[opponent.sel]
     
     print(f"Your opponent, {opponent.name} sent out {opponent_codé}!\n")
@@ -286,28 +291,35 @@ def battle(player, opponent, item):
             print("~~>  You picked a wrong Codémon, dingus.")
             print()                
             sleep(1)
-            choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))
-            print(choice)                      
+            choice = (input(f"<Choose your Codémon!>: {player.codé_list}:"))                   
            
     while opponent.codé_list[opponent.sel].hp > 0 and player.codé_list[player.sel].hp > 0:
+        choice_flag = False
         pandas_table(choice, player_codé) 
         print()
         
         a_choice = input("<Attack or Item or Change?>: ")
         if a_choice.lower() == "attack":
-            print()
-            sleep(1)
-            a_choice = input(f"<Select attack>: {player.codé_list[player.sel].atk_list}: ")
-            if a_choice.lower() in player.codé_list[player.sel].atk_list:
-                print()
-                print(f"{choice} attacks {opponent_codé}!")
+            attack_flag = False
+            choice_flag = True
+            while attack_flag == False:
                 print()
                 sleep(1)
-                print(f"~~>  {choice} used {a_choice}!")
-                mixer.Channel(1).play(mixer.Sound("Slash.wav"))
-                attack(player_codé, opponent_codé, a_choice)
-                
-                sleep(2)
+                a_choice = input(f"<Select attack>: {player.codé_list[player.sel].atk_list}: ")
+                if a_choice.lower() in player.codé_list[player.sel].atk_list:
+                    attack_flag = True
+                    print()
+                    print(f"{choice} attacks {opponent_codé}!")
+                    print()
+                    sleep(1)
+                    print(f"~~>  {choice} used {a_choice}!")
+                    mixer.Channel(1).play(mixer.Sound("Slash.wav"))
+                    attack(player_codé, opponent_codé, a_choice)
+                    sleep(2)
+                else:
+                    print()
+                    print("Wrong choice")
+                    sleep(1)
             
         elif a_choice.lower() == "item":
             item_choice = False
@@ -326,12 +338,14 @@ def battle(player, opponent, item):
                             item_choice = True
                             break
                 sleep(1)
-            else:
-                print()
-                sleep(1)    
+                if choice_flag == False:
+                    print()
+                    sleep(1)
+                      
                             
         elif a_choice.lower() == "change":
             change_flag = False
+            choice_flag = True
             while change_flag == False:
                 print()
                 sleep(1)
@@ -347,7 +361,7 @@ def battle(player, opponent, item):
                         if c_choice == repr(player.codé_list[j]).lower():
                             player.sel = j
                             player_codé = player.codé_list[player.sel]
-                            print(f"{player.name} sent out {player_codé.name}!")
+                            print(f"{player.name} sent out {player_codé.name}!\n")
                             break  
                 else:
                     print()
@@ -360,9 +374,9 @@ def battle(player, opponent, item):
             sleep(1)
             print("~~>  You picked a wrong choice, dingus.")
             print()
-            sleep(1)   
+            sleep(1)
 
-        if opponent_codé.hp > 0:
+        if opponent_codé.hp > 0 and choice_flag == True:
             print(f"{opponent_codé} attacks {player_codé}.") #CPU turn
             CPU_attack = opponent_select(opponent_codé.atk_list)
             mixer.Channel(1).play(mixer.Sound("Slash.wav"))
@@ -458,7 +472,7 @@ def opponent_select(atk_list):
     print()
     sleep(1)
     print(f"~~> used {atk_list[attack_selection]}!")
-    #mixer.Channel(1).play(mixer.Sound("Slash.wav"))
+    mixer.Channel(1).play(mixer.Sound("Slash.wav"))
     print()
     sleep(1)
     return atk_list[attack_selection]    
