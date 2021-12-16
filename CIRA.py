@@ -386,7 +386,7 @@ def battle(player, opponent):
         if player.codé_list[player.sel].hp <= 0:
             for i in range(len(player.codé_list)):
                 if player.codé_list[i].hp > 0:
-                    player_poke = player.codé_list[i]
+                    player_codé = player.codé_list[i]
                     player.sel = i
                     print(f"{player.codé_list[player.sel]} was knocked out...")
                     print()
