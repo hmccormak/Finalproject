@@ -40,7 +40,7 @@ class Trainer():
         codé_list (list): list of codé objects
         item_list (list): list of item objects (computer player will likely not use this)
         sel (int): index of codé list for selection
-        blurb (str): 
+        blurb (str): empty string
     """
     def __init__(self, name, blurb=""):
         self.name = name
@@ -56,10 +56,6 @@ class Trainer():
         
     def add_item(self, item_obj):
         self.item_list.append(item_obj)
-        
-    def add_df(self, codé_obj): #do we still need this if not doing pandas here
-        self.df.append(codé_obj)
-
 
 class Codédex():
     """Codédex object. Will be used to make a dictionary of codé.
@@ -87,10 +83,12 @@ class Codédex():
         """Codé object creator
         
         Args:
-            req_name: name of desired codé to create
+            req_name (str): name of desired codé to create
             
         Returns:
-            created codé object if req_name has a match"""
+            created codé object if req_name has a match
+            (str) "No such Codémon" if req_name does not match
+        """
     
         if req_name in self.codédex:
             req_name = Codé(req_name, 
@@ -116,7 +114,12 @@ class Codé():
         hp (int): the codé's hit points, impacted by damage or item
         defense (int): the codé's defense stat, used to calculate damage
         speed (int): the codé's speed stat
+        move1 (str): first move
+        move2 (str): second move
         atk_list: list of attack names
+    
+    Returns:
+        f-string of the codé's name
     """
     def __init__(self, name, type, atk, hp, defense, speed, move1, move2):
         self.name = name
@@ -134,7 +137,6 @@ class Codé():
 
         
 class ItemCatalog():
-
     """Creates dictionary of items from csv file, items can either heal
     or boost attack/defense. Item name will be the key, its value and it's
     a/d/h label will be in a tuple.
@@ -153,10 +155,6 @@ class ItemCatalog():
         Side effects:
             self.item is populated with items in csv file
         """
-        # with open(fpath, "w", encoding="utf-8") as wf:
-        #     empty_csv = {}
-        #     csv_writer = csv.writer(wf)
-        #     csv_writer.writerows(empty_csv)
         with open(fpath, "r", encoding="utf-8") as f:
             self.itemcat = {}
             reader = csv.reader(f)
@@ -173,7 +171,7 @@ class ItemCatalog():
             item_name (str): name of item
         
         Returns:
-            self.item is populated with item    
+            item (str): the item   
         """
         if item_name in self.itemcat:
             item = Item(item_name, self.itemcat[item_name][0],
@@ -236,7 +234,7 @@ class Item():
 
 
 def battle(player, opponent):
-    '''Allows codé to choose an attack, item, or new codé.
+    '''Allows player to choose an attack, item, or new codé.
 
     Args:
         player: the player trainer object
@@ -247,6 +245,8 @@ def battle(player, opponent):
         prints opponent's codé name
         prints player's codé name
         prints prompt to choose attack or item or asks the user to choose attack/item
+        prints player selections
+        prints empty lines
         print a result if the player has won, lost, or came to a draw
     '''
 
@@ -393,15 +393,11 @@ def battle(player, opponent):
         print(f"{player_codé} was knocked out... ")
         print()
         sleep(1)
-        print(f"{player.name} lost!")            
-    else:
-        print(f"{opponent_codé}'s HP is {opponent_codé.hp}.")
-        print(f"{player_codé}'s HP is {player_codé.hp}.")
-        print(f"DRAW") #just here for testing
+        print(f"{player.name} lost!")
     
 
 def pandas_table(choice, codé):
-    '''Updates and player's codé's stats during battle.
+    '''Updates the player's codé's stats during battle.
     
     Args:
         choice (str): Codé name
@@ -409,7 +405,6 @@ def pandas_table(choice, codé):
     
     Side effects:
         Prints codé's stats
-        Modifies dataframe #is this a necessary side effect?
     '''
     
     df = pd.read_csv("codélist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
@@ -451,10 +446,11 @@ def opponent_select(atk_list):
     '''Attack selection function for CPU player. Attack is selected at random.
     
     Args:
-        atl_list: list of attacks
+        atk_list: list of attacks
     
     Returns:
-        Randomly selected attack from atk_list'''
+        Randomly selected attack from atk_list
+    '''
         
     attack_selection = randint(0,1)
     print()
@@ -477,7 +473,8 @@ def check_select(choice, battle_list, choice_flag):
         
     Side effects:
         prints which item/attack the player chose
-        prints a prompt if the player makes the wrong selection'''
+        prints a prompt if the player makes the wrong selection
+    '''
         
     if str(choice).lower() in battle_list:
         print(f"~~> used {choice}!")
@@ -490,12 +487,12 @@ def attack(p_codé, o_codé, selected_attack):
     """Deals damages based off of codé types and codé stats.
     
     Args:
-        p_codé (obj): attacking codé
-        o_codé (obj): opposing codé
-        selected_attack (string): name of selected attack, determines base strength
+        p_codé (Codé): attacking codé
+        o_codé (Codé): opposing codé
+        selected_attack (str): name of selected attack, determines base strength
     
     Returns:
-        o_codé.hp = the opponent codé's modified hp
+        o_codé.hp (str): the opponent codé's modified hp
         
     Side effects:
         Alters hp attribute of Codé object
