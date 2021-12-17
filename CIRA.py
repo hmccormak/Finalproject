@@ -228,9 +228,6 @@ class Item():
             print(f"Defense has increased by {self.stat} to {codé.defense}")
             print()
             sleep(1)
-           
-        else:
-            print('use_item is not working') #just for testing
 
 
 def battle(player, opponent):
