@@ -402,17 +402,26 @@ def pandas_table(choice, codé):
     
     Side effects:
         Prints codé's stats
+        
+    Citations:
+        https://www.geeksforgeeks.org/how-to-read-csv-file-with-pandas-without-header/, Author: Pallavi (@_sh_pallavi)
+        Used in line 411 to read csv files in pandas
+        
+        https://www.geeksforgeeks.org/add-column-names-to-dataframe-in-pandas/, Author: Verma Ankur (@ankurv343)
+        Used example 2 in line 411 to name column headers in csv dataframe
+        
+        https://stackoverflow.com/questions/24644656/how-to-print-pandas-dataframe-without-index, Author: Pavol Zibrita
+        Used in lines 424, 431, 438, 444
     '''
     
     df = pd.read_csv("codélist.csv", names = ['Name', 'Type', 'Attack', 'HP', 'Defense', 'Speed', 'Move1', 'Move2'])
-    #https://www.geeksforgeeks.org/how-to-read-csv-file-with-pandas-without-header/
+    
     df = df.iloc[:, 2:5]
    
     if choice == 'Squittle':
         updated_hp = df.loc[0, 'HP'] = str(codé.hp)
         updated_atk = df.loc[0, 'Attack'] = str(codé.atk)
         updated_defense = df.loc[0, 'Defense'] = str(codé.defense)
-        #https://stackoverflow.com/questions/24644656/how-to-print-pandas-dataframe-without-index
         codé_stats = df.loc[[0]]
         codé_stats = codé_stats.to_string(index = False)
 
