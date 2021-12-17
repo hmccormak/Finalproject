@@ -18,24 +18,19 @@ PC terminal: python CIRA.py
 This project was very collaborative. Functions, Classes, and Methods were mostly developed by the team somewhat evenly, however below are our specific focuses.
 
 ### Henry McCormack mainly authored:
-  Functions:\
-    main()\
-    battle() (full of block that really should be their own functions)\
-    check_select()\
-  Classes\
-    ItemCatalog() (including methods)
+main()\
+battle() (full of block that really should be their own functions)\
+check_select()\
+ItemCatalog() (including methods)
 
 ### Joseph Hartner mainly authored:
-  Functions:\
-  Classes:
+
 
 ### Mary Waller mainly authored:
-  Functions:\
-    pandas_table()\
-    opponent_select()\
-    attack()\
-  Methods:\
-    get_item() from Item() class
+pandas_table()\
+opponent_select()\
+attack()\
+get_item() from Item() class
 
  # Works Cited:
     Pallavi. "How to read csv file with Pandas without header?" Geeks for Geeks, 3 Mar. 2021, www.geeksforgeeks.org/  how-to-read-csv-file-with-pandas-without-header/. Accessed 17 Dec. 2021.
