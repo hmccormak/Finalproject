@@ -1,7 +1,7 @@
 ## Team Members: Joseph Hartner, Henry McCormak, Mary Waller
 
 # File Purposes:
-CIRA.py = Codémon Project Code,
+CIRA.py = Codémon Project Code\
 codélist.csv = a csv file containing the list and stats of Codés
 itemlist.csv = a csv file containing the list of items and item effects
 meg_intro.mp3 = intro sound
