@@ -11,7 +11,7 @@ MEGALOVANIA.mp3 = original battle sound\
 PDF Document 326 Final.pdf = Final check-in pdf of project process
 
 # How to use CIRA.py:
-Mac terminal: python3 CIRA.py]
+Mac terminal: python3 CIRA.py\
 PC terminal: python CIRA.py
 
 # Attribution:
@@ -27,7 +27,7 @@ This project was very collaborative. Functions, Classes, and Methods were mostly
 
 ### Joseph Hartner mainly authored:
   Functions:\
-  Classes:\
+  Classes:
 
 ### Mary Waller mainly authored:
   Functions:\
