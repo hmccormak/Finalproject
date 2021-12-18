@@ -345,7 +345,7 @@ def battle(player, opponent):
                             player_codé = player.codé_list[player.sel]
                             print(f"{player.name} sent out {player_codé.name}!\n")
                             break
-                        else:
+                        elif c_choice.lower() == repr(player.codé_list[j]).lower() and player.codé_list[j].hp <= 0:
                             print("That codé is out cold!")
                             break
                 else:
