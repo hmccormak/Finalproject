@@ -127,7 +127,7 @@ class Codé():
         self.atk = int(atk)
         self.hp = int(hp)
         self.defense = int(defense)
-        self.speed = int(speed) #do we need this? not in pandas display
+        self.speed = int(speed)
         self.move1 = move1
         self.move2 = move2
         self.atk_list = [self.move1, self.move2]
@@ -397,8 +397,8 @@ def pandas_table(choice, codé):
     '''Updates the player's codé's stats during battle.
     
     Args:
-        choice (str): Codé name
-        player (obj): Codé object
+        choice (str): codé name
+        player (Codé): Codé object
     
     Side effects:
         Prints codé's stats
@@ -507,7 +507,7 @@ def attack(p_codé, o_codé, selected_attack):
     if selected_attack.lower() == p_codé.atk_list[0].lower():
         starting_power = 10
 
-    elif selected_attack.lower() == p_codé.atk_list[1].lower(): #should this elif be an else statement
+    elif selected_attack.lower() == p_codé.atk_list[1].lower():
         starting_power = 20
     
     
