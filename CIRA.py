@@ -333,7 +333,7 @@ def battle(player, opponent):
                 sleep(1)
                 print(f"{player.name} decides its enough for {player.codé_list[player.sel]}!")
                 print()
-                c_choice = input(f"<Choose your Codémon!>: {player.codé_list}:")
+                c_choice = input(f"<Choose your Codémon!>: {player.codé_list} :")
                 temp_list = []
                 for i in range(len(player.codé_list)):
                     temp_list.append(player.codé_list[i].name.lower())
