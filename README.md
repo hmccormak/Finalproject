@@ -4,10 +4,6 @@
 CIRA.py = Codémon Project Code\
 codélist.csv = a csv file containing the list and stats of Codés\
 itemlist.csv = a csv file containing the list of items and item effects\
-meg_intro.mp3 = intro sound\
-meg_loop.mp3 = game sound\
-slash.wav = battle sound\
-MEGALOVANIA.mp3 = original battle sound\
 PDF Document 326 Final.pdf = Final check-in pdf of project process
 
 # How to use CIRA.py:
