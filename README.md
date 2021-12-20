@@ -24,7 +24,9 @@ check_select()\
 ItemCatalog() (including methods)
 
 ### Joseph Hartner mainly authored:
-
+Codédex() and Codé() class\
+battle() (assist with item/Codémon/change section)\
+battle() (assist with while loop)
 
 ### Mary Waller mainly authored:
 pandas_table()\
